@@ -1,0 +1,40 @@
+{
+  "standard": {
+    "id": "standard",
+    "name": "Standard Plan",
+    "description": "A quick, general-purpose renovation plan with common tasks and milestones.",
+    "tasks": [
+      { "title": "Site Survey & Assessment", "offset_days": 7 },
+      { "title": "Architectural Design & Permits", "offset_days": 30 },
+      { "title": "Foundation Pour", "offset_days": 45 },
+      { "title": "Framing & Structural Work", "offset_days": 60 }
+    ],
+    "milestones": [
+      { "title": "Design Approved", "offset_days": 14, "status": "Pending" },
+      { "title": "Permit Issued", "offset_days": 30, "status": "Pending" },
+      { "title": "Lock-Up Stage", "offset_days": 75, "status": "Upcoming" }
+    ]
+  },
+  "catalogue": {
+    "id": "catalogue",
+    "name": "Catalogue Design",
+    "description": "Plan aligned to a selected catalogue design, with review and permit steps.",
+    "tasks": [
+      { "title": "Select Catalogue Design", "offset_days": 3 },
+      { "title": "Design Review with Architect", "offset_days": 14 },
+      { "title": "Apply for Permits", "offset_days": 21 },
+      { "title": "Contractor Tender & Quotes", "offset_days": 28 }
+    ],
+    "milestones": [
+      { "title": "Design Selected", "offset_days": 7, "status": "Pending" },
+      { "title": "Quotes Received", "offset_days": 35, "status": "Pending" }
+    ]
+  },
+  "custom": {
+    "id": "custom",
+    "name": "Custom Plan",
+    "description": "Start with an empty plan and add tasks that match your project needs.",
+    "tasks": [],
+    "milestones": []
+  }
+}

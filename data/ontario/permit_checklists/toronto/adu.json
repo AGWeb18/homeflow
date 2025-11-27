@@ -1,0 +1,120 @@
+{
+  "municipality_key": "toronto",
+  "municipality_name": "City of Toronto",
+  "project_type": "adu",
+  "title": "Accessory Dwelling Unit (ADU) - Toronto",
+  "description": "Structured checklist for homeowners planning an ADU (basement unit, laneway suite, garden suite, or second unit) in the City of Toronto.",
+  "sources": ["toronto_permits", "toronto_open_data", "obc", "cra_gst_hst", "esa"],
+  "checklist_items": [
+    {
+      "id": "to_adu_zoning",
+      "title": "Zoning Review / Zoning Clearance",
+      "description": "Confirm current zoning permits the proposed ADU type (e.g., laneway suite, basement apartment). Check lot coverage, setbacks, height, parking and accessory building rules.",
+      "required": true,
+      "docs_required": "Property deed/assessment, site plan showing setbacks, existing and proposed drawings",
+      "typical_timeline_days": 7,
+      "condition": "Required to determine whether a minor variance or rezoning is necessary",
+      "source_key": "toronto_permits",
+      "notes": "Toronto zoning rules vary by zone; laneway suites have specific policy guidance — confirm with planning staff if unsure."
+    },
+    {
+      "id": "to_adu_building_permit",
+      "title": "Building Permit",
+      "description": "Apply for a Building Permit to ensure compliance with the Ontario Building Code (structural, fire separation, egress, insulation).",
+      "required": true,
+      "docs_required": "Completed permit application, site plan, floor plans, elevations, construction drawings, designer/architect contact",
+      "typical_timeline_days": 20,
+      "condition": "Required for new separate dwelling units or changes affecting occupancy or structure",
+      "source_key": "toronto_permits",
+      "notes": "Small projects may be handled as renovations but fire separations and egress requirements for secondary units must meet OBC standards."
+    },
+    {
+      "id": "to_adu_laneway_policy_check",
+      "title": "Laneway Suite Policy / Guidelines (if applicable)",
+      "description": "If proposing a laneway suite, verify applicable laneway suite policies, design guidelines and lot-specific constraints.",
+      "required": false,
+      "docs_required": "Site photos, proposed siting plan",
+      "typical_timeline_days": 7,
+      "condition": "Applies when the ADU is a laneway suite",
+      "source_key": "toronto_permits",
+      "notes": "Toronto's laneway policies include design guidelines and servicing considerations (stormwater, access)."
+    },
+    {
+      "id": "to_adu_tree_protection",
+      "title": "Tree Protection / Removal Permit (if applicable)",
+      "description": "If protected or significant trees will be impacted, obtain a tree permit or comply with the city's tree protection rules.",
+      "required": false,
+      "docs_required": "Tree inventory, arborist report, mitigation plan",
+      "typical_timeline_days": 14,
+      "condition": "Applies when construction affects trees on or adjacent to the property",
+      "source_key": "toronto_open_data",
+      "notes": "Tree permits can delay construction; verify early and consider mitigation plans to preserve trees."
+    },
+    {
+      "id": "to_adu_septic_or_sanitary",
+      "title": "Sewer/Septic Review",
+      "description": "Confirm municipal sewer capacity or on-site septic allowance for additional unit; rural properties may need septic upgrades.",
+      "required": false,
+      "docs_required": "Septic records or municipal sewer connection confirmation",
+      "typical_timeline_days": 14,
+      "condition": "Applies when adding plumbing fixtures or in areas without municipal sewer services",
+      "source_key": "toronto_permits",
+      "notes": "Most Toronto properties are connected to municipal sewer; confirm with municipal utility if unclear."
+    },
+    {
+      "id": "to_adu_electrical",
+      "title": "Electrical Permit / ESA Notification",
+      "description": "Ensure electrical work is permitted and performed by a licensed electrician; major service changes normally require ESA notification or permit.",
+      "required": true,
+      "docs_required": "Electrical scope, electrician contact, single-line wiring diagram if service changes",
+      "typical_timeline_days": 7,
+      "condition": "Required for new circuits, panels, or increased service capacity",
+      "source_key": "esa",
+      "notes": "Follow Electrical Safety Authority guidance for permit triggers and licensed contractor requirements."
+    },
+    {
+      "id": "to_adu_plumbing",
+      "title": "Plumbing Permit",
+      "description": "Plumbing permit for new fixtures or drainage changes associated with the ADU.",
+      "required": false,
+      "docs_required": "Plumbing drawings, fixture schedule",
+      "typical_timeline_days": 7,
+      "condition": "Required if adding new plumbing fixtures or altering drainage",
+      "source_key": "toronto_permits",
+      "notes": "If the ADU adds a bathroom/kitchen, plumbing permitting is likely required."
+    },
+    {
+      "id": "to_adu_heritage",
+      "title": "Heritage / Conservation Review (if applicable)",
+      "description": "Check whether the property is in a heritage area or is a heritage-designated property and whether additional approvals are required.",
+      "required": false,
+      "docs_required": "Heritage documentation, conservation plans",
+      "typical_timeline_days": 21,
+      "condition": "Applies if the property is listed or in a heritage conservation district",
+      "source_key": "toronto_open_data",
+      "notes": "Heritage restrictions can affect exterior alterations and may require additional approvals."
+    },
+    {
+      "id": "to_adu_fees_and_hst",
+      "title": "Fees, Development Charges & HST",
+      "description": "Review applicable municipal fees, possible development charges, and HST treatment for construction and services.",
+      "required": true,
+      "docs_required": "Fee schedule reference, contractor quotes",
+      "typical_timeline_days": 1,
+      "condition": "Review before contracting work; incorporate HST (Ontario 13%) into cost estimates",
+      "source_key": "cra_gst_hst",
+      "notes": "Some small renovations have different HST treatments; verify with CRA guidance or your accountant."
+    },
+    {
+      "id": "to_adu_preapp",
+      "title": "Pre-application / Neighbour Consultation (recommended)",
+      "description": "Consider a pre-application meeting with planning staff and consult neighbours for complex proposals, variances, or laneway suites.",
+      "required": false,
+      "docs_required": "Meeting notes, correspondence",
+      "typical_timeline_days": 7,
+      "condition": "Recommended for complex projects or where variances are likely",
+      "source_key": "toronto_permits",
+      "notes": "A pre-application meeting can surface constraints early and reduce formal review time."
+    }
+  ]
+}

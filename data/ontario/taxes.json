@@ -1,0 +1,10 @@
+{
+  "province": "ON",
+  "taxes": [
+    {
+      "tax_name": "HST",
+      "rate": 0.13,
+      "notes": "Ontario HST (13%) - used for rough cost estimator"
+    }
+  ]
+}

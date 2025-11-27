@@ -1,0 +1,109 @@
+{
+  "municipality_key": "kawartha_lakes",
+  "municipality_name": "City of Kawartha Lakes",
+  "project_type": "adu",
+  "title": "Accessory Dwelling Unit (ADU) - Kawartha Lakes",
+  "description": "Structured checklist for homeowners planning an ADU in the City of Kawartha Lakes. Each item includes required docs, typical timelines, and the canonical source.",
+  "sources": ["kawartha_permits", "obc", "cra_gst_hst"],
+  "checklist_items": [
+    {
+      "id": "kl_adu_zoning_review",
+      "title": "Zoning Review / Zoning Clearance",
+      "description": "Confirm the property's zoning permits an ADU; check lot coverage, setbacks, height limits, and accessory building rules.",
+      "required": true,
+      "docs_required": "Property deed/assessment, site plan showing setbacks, existing and proposed drawings",
+      "typical_timeline_days": 7,
+      "condition": "Required to determine if a minor variance or zoning amendment is necessary",
+      "source_key": "kawartha_permits",
+      "notes": "If zoning does not allow an ADU, a variance or rezoning may be required; consult the municipal planning department."
+    },
+    {
+      "id": "kl_adu_building_permit",
+      "title": "Building Permit",
+      "description": "Building permit application for the ADU to ensure OBC compliance (structural, fire separation, egress, insulation).",
+      "required": true,
+      "docs_required": "Completed permit application, site plan, floor plans, elevations, construction drawings",
+      "typical_timeline_days": 14,
+      "condition": "Required for new separate dwelling units, significant alterations, or changes in occupancy",
+      "source_key": "kawartha_permits",
+      "notes": "Follow OBC requirements for means of egress, fire separations and insulation; work with a designer or architect as needed."
+    },
+    {
+      "id": "kl_adu_septic_review",
+      "title": "Septic / On-site Services Review",
+      "description": "Determine if the existing septic system supports an additional dwelling unit; if not, upgrades or permits may be required.",
+      "required": true,
+      "docs_required": "Septic system records, inspections, soil tests (if requested)",
+      "typical_timeline_days": 21,
+      "condition": "Required if the ADU adds new plumbing fixtures or increases occupancy; rural properties commonly need this check",
+      "source_key": "kawartha_permits",
+      "notes": "Kawartha Lakes may require septic approvals or inspections before building permits are issued."
+    },
+    {
+      "id": "kl_adu_shoreline_conservation",
+      "title": "Conservation Authority / Shoreline Review (if applicable)",
+      "description": "If the property is near a watercourse or shoreline, a conservation authority permit or clearance may be required.",
+      "required": false,
+      "docs_required": "Site plan showing proximity to water, photos, conservation authority application",
+      "typical_timeline_days": 21,
+      "condition": "Applies when site is within regulated area; check local conservation authority jurisdiction",
+      "source_key": "kawartha_permits",
+      "notes": "Conservation authority jurisdiction may add separate permit steps or restrictions."
+    },
+    {
+      "id": "kl_adu_electrical_permit",
+      "title": "Electrical Permit / ESA Notification",
+      "description": "Ensure electrical work is permitted and performed by a licensed electrician; major service changes normally require an ESA permit or notification.",
+      "required": true,
+      "docs_required": "Electrical scope, electrician contact, single-line wiring diagram if service changes",
+      "typical_timeline_days": 7,
+      "condition": "Required for new circuits, panels, or increased service capacity",
+      "source_key": "obc",
+      "notes": "Refer to Electrical Safety Authority guidance for permit triggers."
+    },
+    {
+      "id": "kl_adu_plumbing_permit",
+      "title": "Plumbing Permit",
+      "description": "Plumbing permit for new fixtures or drainage changes associated with the ADU.",
+      "required": false,
+      "docs_required": "Plumbing drawings, fixture schedule",
+      "typical_timeline_days": 7,
+      "condition": "Required if adding new plumbing fixtures or altering drainage",
+      "source_key": "kawartha_permits",
+      "notes": "If the ADU adds a bathroom/kitchen, plumbing permitting is likely required."
+    },
+    {
+      "id": "kl_adu_heritable_review",
+      "title": "Heritage / Conservation Review (if applicable)",
+      "description": "Check if the property is in a designated heritage area or subject to heritage controls.",
+      "required": false,
+      "docs_required": "Heritage property documentation, conservation plans",
+      "typical_timeline_days": 21,
+      "condition": "Applies if the property is listed or in a heritage conservation district",
+      "source_key": "kawartha_permits",
+      "notes": "Heritage restrictions can affect exterior alterations and additional approvals may be required."
+    },
+    {
+      "id": "kl_adu_fees_and_charges",
+      "title": "Fees, Development Charges & HST",
+      "description": "Understand applicable municipal fees, development charges and provincial HST treatment for construction and services.",
+      "required": true,
+      "docs_required": "Fee schedule reference, contractor quotes",
+      "typical_timeline_days": 1,
+      "condition": "Review before contracting work; incorporate HST (Ontario 13%) into cost estimates",
+      "source_key": "cra_gst_hst",
+      "notes": "Development charges may apply for large projects; consult municipal finance department."
+    },
+    {
+      "id": "kl_adu_neighbour_consult",
+      "title": "Pre-application / Neighbour Consultation (recommended)",
+      "description": "Consult neighbours and, if applicable, undertake a pre-application meeting with planning staff to surface issues early.",
+      "required": false,
+      "docs_required": "Meeting notes, correspondence",
+      "typical_timeline_days": 7,
+      "condition": "Recommended for complex projects or where variances are likely",
+      "source_key": "kawartha_permits",
+      "notes": "Pre-application meetings reduce risk of surprises during formal review."
+    }
+  ]
+}

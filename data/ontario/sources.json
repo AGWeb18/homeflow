@@ -1,0 +1,41 @@
+{
+  "sources": [
+    {
+      "key": "obc",
+      "name": "Ontario Building Code",
+      "url": "https://www.ontario.ca/document/ontario-building-code",
+      "notes": "Primary reference for building triggers and technical requirements"
+    },
+    {
+      "key": "toronto_permits",
+      "name": "City of Toronto - Building & Permits",
+      "url": "https://www.toronto.ca/services-payments/building-construction/",
+      "open_data": "https://open.toronto.ca/",
+      "notes": "Use this for checklist authoring and permit record examples"
+    },
+    {
+      "key": "toronto_open_data",
+      "name": "Toronto Open Data",
+      "url": "https://open.toronto.ca/",
+      "notes": "Parcel, zoning, and permit record datasets"
+    },
+    {
+      "key": "kawartha_permits",
+      "name": "City of Kawartha Lakes - Permits & Planning",
+      "url": "https://www.kawarthalakes.ca/en/doing-business/permits.aspx",
+      "notes": "Municipal permit guidance and planning pages"
+    },
+    {
+      "key": "cra_gst_hst",
+      "name": "Canada Revenue Agency - GST/HST",
+      "url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst.html",
+      "notes": "Tax guidance for estimator (Ontario: HST 13%)"
+    },
+    {
+      "key": "esa",
+      "name": "Electrical Safety Authority (ESA)",
+      "url": "https://www.esasafe.com/",
+      "notes": "Electrical permit and licensing guidance for Ontario"
+    }
+  ]
+}
