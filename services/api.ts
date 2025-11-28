@@ -165,6 +165,9 @@ export const api = {
     const tasks = (template.tasks || []).map((t: any) => ({
       project_id: projectId,
       title: t.title,
+      description: t.description || null,
+      diy_guidance: t.diy_guidance || null,
+      cost_savings: t.cost_savings || null,
       due_date: addDays(today, t.offset_days || 0).toISOString().split('T')[0],
       completed: false
     }));

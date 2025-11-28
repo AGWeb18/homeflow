@@ -45,6 +45,9 @@ export interface Task {
   id: string;
   project_id: string;
   title: string;
+  description?: string;
+  diy_guidance?: string;
+  cost_savings?: string;
   due_date: string;
   completed: boolean;
   stage?: string; // Optional: tag task with stage ('permitting', 'design', etc.)

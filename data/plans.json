@@ -4,10 +4,34 @@
     "name": "Standard Plan",
     "description": "A quick, general-purpose renovation plan with common tasks and milestones.",
     "tasks": [
-      { "title": "Site Survey & Assessment", "offset_days": 7 },
-      { "title": "Architectural Design & Permits", "offset_days": 30 },
-      { "title": "Foundation Pour", "offset_days": 45 },
-      { "title": "Framing & Structural Work", "offset_days": 60 }
+      { 
+        "title": "Site Survey & Assessment", 
+        "offset_days": 7,
+        "description": "Hire a professional land surveyor to prepare a boundary and topographic survey. This document is essential for design and permits. It shows exact property lines, existing buildings, trees, and utility easements. Action: Search for 'Land Surveyor [Your City]', request a quote, and upload the final survey PDF to the Documents page.",
+        "diy_guidance": "While you cannot create a legal survey yourself, you can save money by locating existing survey pins (iron bars) on your property corners and clearing brush around them so the surveyor spends less time searching. You can also purchase existing surveys from landregistry.ca for ~$30 to give the surveyor a head start.",
+        "cost_savings": "$200 - $400 in surveyor billable hours"
+      },
+      { 
+        "title": "Architectural Design & Permits", 
+        "offset_days": 30,
+        "description": "Work with an architect or designer to create the blueprints for your project. These drawings must comply with local zoning and building codes. Action: Interview designers, review their work, and once finalized, upload your design drawings to the Documents page.",
+        "diy_guidance": "In Ontario, you are legally allowed to design your own home (BCIN exemption). You can use software like SketchUp or Chief Architect to draw the plans yourself. However, you are fully liable for code compliance. This is high-effort but high-reward.",
+        "cost_savings": "$3,000 - $8,000 (Designer Fees)"
+      },
+      { 
+        "title": "Foundation Pour", 
+        "offset_days": 45,
+        "description": "The first major construction step. Excavation is done, footings are inspected, and concrete is poured to create the base of your structure. Action: Ensure your contractor has scheduled the required municipal foundation inspection before pouring concrete.",
+        "diy_guidance": "Act as your own General Contractor: Instead of hiring a builder to manage this, hire the excavation company and the concrete forming company directly. You handle the schedule and inspection booking.",
+        "cost_savings": "15% - 20% (GC Management Fee)"
+      },
+      { 
+        "title": "Framing & Structural Work", 
+        "offset_days": 60,
+        "description": "The 'skeleton' of the building goes up. Walls, floors, and the roof structure are built. At the end of this stage, the shape of the room is visible. Action: Walk through with your contractor to verify window and door placements before electrical/plumbing rough-ins begin.",
+        "diy_guidance": "If you are handy, you can assist with site cleanup and material moving, which reduces paid labour hours. However, framing requires skill. The biggest saving comes from sourcing lumber yourself if you can find deals, though contractors often get trade discounts.",
+        "cost_savings": "$500 - $1,000 (Labour assistance)"
+      }
     ],
     "milestones": [
       { "title": "Design Approved", "offset_days": 14, "status": "Pending" },
@@ -20,10 +44,34 @@
     "name": "Catalogue Design",
     "description": "Plan aligned to a selected catalogue design, with review and permit steps.",
     "tasks": [
-      { "title": "Select Catalogue Design", "offset_days": 3 },
-      { "title": "Design Review with Architect", "offset_days": 14 },
-      { "title": "Apply for Permits", "offset_days": 21 },
-      { "title": "Contractor Tender & Quotes", "offset_days": 28 }
+      { 
+        "title": "Select Catalogue Design", 
+        "offset_days": 3,
+        "description": "Browse the design catalogue and choose a model that fits your lot and budget. Consider the orientation of windows and access to the unit. Action: Purchase the design license or download the preliminary set to check fit.",
+        "diy_guidance": "Using a pre-made catalogue design is effectively the 'DIY' of the design world compared to custom architecture. You save significantly by reusing plans.",
+        "cost_savings": "70% vs Custom Architect Fees"
+      },
+      { 
+        "title": "Design Review with Architect", 
+        "offset_days": 14,
+        "description": "Even pre-made designs need a site plan to show where they sit on your specific lot. Engage a local designer to prepare the 'Site Plan' and ensure the foundation matches your soil conditions. Action: Send your chosen design and your site survey to a local designer.",
+        "diy_guidance": "You can draw the Site Plan yourself if you are comfortable with CAD or even neat hand drawing (depending on municipality). You must accurately plot setbacks and lot coverage.",
+        "cost_savings": "$500 - $1,500"
+      },
+      { 
+        "title": "Apply for Permits", 
+        "offset_days": 21,
+        "description": "Submit the full package (Catalogue Drawings + Site Plan + Forms) to your municipality. You will need to pay the permit fee. Action: Go to your city's building portal or service counter to submit the application, then upload the receipt to Documents.",
+        "diy_guidance": "Many people hire 'permit runners' or agents. You can absolutely do this yourself. It involves filling out the forms (e.g., 'Application for a Permit to Construct or Demolish') and waiting in line or uploading files.",
+        "cost_savings": "$600 - $1,200 (Agent Fees)"
+      },
+      { 
+        "title": "Contractor Tender & Quotes", 
+        "offset_days": 28,
+        "description": "Send your permit-ready drawings to contractors to get firm construction quotes. Do not rely on estimates; get a fixed-price contract. Action: Email your drawings to 3 contractors and ask for a quote within 2 weeks.",
+        "diy_guidance": "This is Project Management 101. By finding, vetting, and comparing contractors yourself, you avoid paying a Project Manager.",
+        "cost_savings": "10% of Project Value (PM Fees)"
+      }
     ],
     "milestones": [
       { "title": "Design Selected", "offset_days": 7, "status": "Pending" },
