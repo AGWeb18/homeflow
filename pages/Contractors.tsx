@@ -1,26 +1,68 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { api } from "../services/api";
-import { Contractor } from "../types";
+import { Contractor, Project } from "../types";
 
 const Contractors = () => {
   const [contractors, setContractors] = useState<Contractor[]>([]);
+  const [team, setTeam] = useState<Set<string>>(new Set());
+  const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await api.getContractorsDirectory();
-        setContractors(data);
+        const [dirData, projData] = await Promise.all([
+          api.getContractorsDirectory(),
+          api.getProject()
+        ]);
+        setContractors(dirData);
+        setProject(projData);
+
+        if (projData) {
+          const teamData = await api.getTeam(projData.id);
+          setTeam(new Set(teamData.map(c => c.id)));
+        }
       } catch (error) {
         console.error("Failed to fetch contractors", error);
-        toast.error("Failed to load contractors directory. Please try again.");
+        toast.error("Failed to load directory.");
       } finally {
         setLoading(false);
       }
     };
     fetchData();
   }, []);
+
+  const handleToggleTeam = async (contractor: Contractor) => {
+    if (!project) {
+        toast.error("You need to create a project first.");
+        return;
+    }
+    
+    const isAdded = team.has(contractor.id);
+    try {
+        if (isAdded) {
+            await api.removeFromTeam(project.id, contractor.id);
+            team.delete(contractor.id);
+            toast.success(`${contractor.name} removed from team.`);
+        } else {
+            await api.addToTeam(project.id, contractor.id, contractor.role);
+            team.add(contractor.id);
+            toast.success(`${contractor.name} added to team!`);
+        }
+        // Trigger re-render
+        setTeam(new Set(team));
+    } catch (err) {
+        toast.error("Failed to update team.");
+        console.error(err);
+    }
+  };
+
+  const filteredContractors = contractors.filter(c => 
+    c.name.toLowerCase().includes(filterText.toLowerCase()) || 
+    c.role.toLowerCase().includes(filterText.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -34,7 +76,7 @@ const Contractors = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8 p-6">
       <div>
         <h1 className="text-3xl font-black text-slate-900 tracking-tight">
           Find Your Project Pro
@@ -53,54 +95,30 @@ const Contractors = () => {
           </span>
           <input
             type="text"
+            value={filterText}
+            onChange={e => setFilterText(e.target.value)}
             placeholder="Search by name, trade, or location..."
             className="w-full h-12 pl-12 pr-4 rounded-lg bg-slate-50 border-transparent focus:bg-white focus:border-primary focus:ring-primary transition-all"
           />
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:border-primary text-slate-700">
+           <span className="text-xs text-slate-400 font-bold uppercase tracking-wide">Filters</span>
+           {/* Placeholder filters */}
+          <button className="px-3 py-1 bg-slate-50 hover:bg-slate-100 rounded-md text-sm text-slate-600 border border-slate-200">
             Service Needed
-            <span className="material-symbols-outlined text-lg">
-              arrow_drop_down
-            </span>
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:border-primary text-slate-700">
+          <button className="px-3 py-1 bg-slate-50 hover:bg-slate-100 rounded-md text-sm text-slate-600 border border-slate-200">
             Location
-            <span className="material-symbols-outlined text-lg">
-              arrow_drop_down
-            </span>
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-medium hover:border-primary text-slate-700">
-            Rating
-            <span className="material-symbols-outlined text-lg">
-              arrow_drop_down
-            </span>
-          </button>
-          <label className="flex items-center gap-2 px-2 cursor-pointer">
-            <input
-              type="checkbox"
-              className="rounded border-slate-300 text-primary focus:ring-primary"
-            />
-            <span className="text-sm font-medium text-slate-700">
-              ADU Specialist
-            </span>
-          </label>
-          <div className="ml-auto flex items-center gap-2 text-sm text-slate-500">
-            Sort by:
-            <button className="flex items-center gap-1 font-medium text-slate-900">
-              Best Match
-              <span className="material-symbols-outlined text-lg">
-                arrow_drop_down
-              </span>
-            </button>
-          </div>
         </div>
       </div>
 
       {/* Grid */}
-      {contractors.length > 0 ? (
+      {filteredContractors.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {contractors.map((contractor) => (
+          {filteredContractors.map((contractor) => {
+            const isAdded = team.has(contractor.id);
+            return (
             <div
               key={contractor.id}
               className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow flex flex-col"
@@ -121,11 +139,6 @@ const Contractors = () => {
                       </p>
                     </div>
                   </div>
-                  <button className="text-slate-300 hover:text-red-500 transition-colors">
-                    <span className="material-symbols-outlined filled">
-                      favorite
-                    </span>
-                  </button>
                 </div>
 
                 <div className="flex items-center gap-2 mb-4">
@@ -157,21 +170,36 @@ const Contractors = () => {
                       ADU Certified
                     </span>
                   )}
-                  {contractor.licensed && (
-                    <span className="px-2 py-1 bg-slate-100 text-slate-600 text-xs font-bold rounded-full">
-                      Licensed & Insured
-                    </span>
-                  )}
                 </div>
               </div>
 
-              <div className="p-5 pt-0 mt-auto">
-                <button className="w-full h-10 flex items-center justify-center bg-primary hover:bg-primary-hover text-slate font-bold rounded-lg transition-colors text-sm">
+              <div className="p-5 pt-0 mt-auto grid grid-cols-2 gap-3">
+                <button className="h-10 flex items-center justify-center border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-lg transition-colors text-sm">
                   View Profile
+                </button>
+                <button 
+                    onClick={() => handleToggleTeam(contractor)}
+                    className={`h-10 flex items-center justify-center font-bold rounded-lg transition-colors text-sm gap-1 ${
+                        isAdded 
+                        ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border border-emerald-200" 
+                        : "bg-slate-900 text-white hover:bg-slate-800"
+                    }`}
+                >
+                   {isAdded ? (
+                       <>
+                         <span className="material-symbols-outlined text-lg">check</span>
+                         Added
+                       </>
+                   ) : (
+                       <>
+                         <span className="material-symbols-outlined text-lg">person_add</span>
+                         Add to Team
+                       </>
+                   )}
                 </button>
               </div>
             </div>
-          ))}
+          )})}
         </div>
       ) : (
         <div className="text-center py-12">
@@ -184,7 +212,7 @@ const Contractors = () => {
             No contractors found
           </h3>
           <p className="text-slate-500">
-            Try adjusting your search or filters.
+            Try adjusting your search.
           </p>
         </div>
       )}

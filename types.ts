@@ -53,11 +53,32 @@ export interface Task {
   stage?: string; // Optional: tag task with stage ('permitting', 'design', etc.)
 }
 
+export interface BudgetItem {
+  id: string;
+  project_id: string;
+  category: string;
+  name: string;
+  estimated_amount: number;
+}
+
 export interface Expense {
   id: string;
   project_id: string;
+  budget_item_id?: string | null;
   name: string;
   amount: number;
-  date?: string;
+  date?: string; // ISO Date
   category?: string;
+  payee?: string;
+  receipt_url?: string;
+}
+
+export interface ProjectDocument {
+  id: string;
+  name: string;
+  type: string; // MIME type or category
+  url: string;
+  size: number;
+  created_at: string;
+  path: string; // Storage path
 }

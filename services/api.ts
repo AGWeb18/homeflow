@@ -1,4 +1,4 @@
-import { User, Project, Task, Milestone, Contractor, ProjectStage } from '../types';
+import { User, Project, Task, Milestone, Contractor, ProjectStage, ProjectDocument, BudgetItem, Expense } from '../types';
 import { supabase } from '../lib/supabase';
 
 export const api = {
@@ -128,6 +128,28 @@ export const api = {
     }
 
     return [];
+  },
+
+  addToTeam: async (projectId: string, contractorId: string, role: string): Promise<void> => {
+     const { error } = await supabase
+        .from('project_team')
+        .insert([{ project_id: projectId, contractor_id: contractorId, role }]);
+     
+     if (error) {
+         // Ignore duplicate violations
+         if (error.code === '23505') return; 
+         throw error;
+     }
+  },
+
+  removeFromTeam: async (projectId: string, contractorId: string): Promise<void> => {
+     const { error } = await supabase
+        .from('project_team')
+        .delete()
+        .eq('project_id', projectId)
+        .eq('contractor_id', contractorId);
+
+     if (error) throw error;
   },
 
   getContractorsDirectory: async (): Promise<Contractor[]> => {
@@ -307,5 +329,153 @@ export const api = {
       .from('projects')
       .update({ stage: null, status: 'Planning', progress: 0 })
       .eq('id', projectId);
+  },
+
+  // Financials
+  getBudgetItems: async (projectId: string): Promise<BudgetItem[]> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user && projectId) {
+         const { data, error } = await supabase
+            .from('budget_items')
+            .select('*')
+            .eq('project_id', projectId)
+            .order('created_at', { ascending: true });
+            
+         if (error) {
+             console.error('Error fetching budget items:', error);
+             return [];
+         }
+         return (data as BudgetItem[]) || [];
+    }
+    return [];
+  },
+
+  createBudgetItem: async (item: Omit<BudgetItem, 'id'>): Promise<BudgetItem> => {
+     const { data, error } = await supabase
+        .from('budget_items')
+        .insert([item])
+        .select()
+        .single();
+
+     if (error) throw error;
+     return data as BudgetItem;
+  },
+
+  deleteBudgetItem: async (id: string): Promise<void> => {
+     const { error } = await supabase.from('budget_items').delete().eq('id', id);
+     if (error) throw error;
+  },
+
+  getExpenses: async (projectId: string): Promise<Expense[]> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user && projectId) {
+         const { data, error } = await supabase
+            .from('expenses')
+            .select('*')
+            .eq('project_id', projectId)
+            .order('date', { ascending: false });
+            
+         if (error) {
+             console.error('Error fetching expenses:', error);
+             return [];
+         }
+         return (data as Expense[]) || [];
+    }
+    return [];
+  },
+
+  createExpense: async (expense: Omit<Expense, 'id'>): Promise<Expense> => {
+     const { data, error } = await supabase
+        .from('expenses')
+        .insert([expense])
+        .select()
+        .single();
+
+     if (error) throw error;
+     return data as Expense;
+  },
+
+  deleteExpense: async (id: string): Promise<void> => {
+     const { error } = await supabase.from('expenses').delete().eq('id', id);
+     if (error) throw error;
+  },
+
+  // Documents
+  uploadDocument: async (projectId: string, file: File): Promise<ProjectDocument | null> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) throw new Error('User not authenticated');
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `${projectId}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('project-files')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      console.error('Error uploading file:', uploadError);
+      throw uploadError;
+    }
+
+    return {
+      id: filePath,
+      name: file.name,
+      type: file.type,
+      url: '', // Generated on fetch
+      size: file.size,
+      created_at: new Date().toISOString(),
+      path: filePath
+    };
+  },
+
+  getDocuments: async (projectId: string): Promise<ProjectDocument[]> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) throw new Error('User not authenticated');
+
+    const { data, error } = await supabase.storage
+      .from('project-files')
+      .list(projectId, {
+        limit: 100,
+        offset: 0,
+        sortBy: { column: 'created_at', order: 'desc' },
+      });
+
+    if (error) {
+      console.error('Error listing files:', error);
+      return [];
+    }
+
+    const documents: ProjectDocument[] = await Promise.all(
+      data.map(async (file) => {
+        const path = `${projectId}/${file.name}`;
+        const { data: signedUrl } = await supabase.storage
+          .from('project-files')
+          .createSignedUrl(path, 3600);
+
+        return {
+          id: file.id,
+          name: file.name,
+          type: file.metadata?.mimetype || 'application/octet-stream',
+          url: signedUrl?.signedUrl || '',
+          size: file.metadata?.size || 0,
+          created_at: file.created_at,
+          path: path
+        };
+      })
+    );
+
+    return documents;
+  },
+
+  deleteDocument: async (path: string): Promise<void> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) throw new Error('User not authenticated');
+
+    const { error } = await supabase.storage
+      .from('project-files')
+      .remove([path]);
+
+    if (error) throw error;
   }
 };
