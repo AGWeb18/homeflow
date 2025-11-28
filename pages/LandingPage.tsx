@@ -196,46 +196,6 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-slate-900 text-center mb-12">
-            Trusted by Homeowners Like You
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Sarah L.",
-                quote:
-                  "HomeFlow took all the guesswork out of building our granny flat. The cost estimator was incredibly accurate!",
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAZLc32F4Ed4O7YzBCOU7UQHVW7IDc0mT3lOvE8b65Gfzpgm1qhVLatpi9SsoRr8fzv1EtVt8r1W1kg1Z3yuajGOeedSg3kmuy7adL2y-lyh5Vn-LMaZ7HBdJfPKEfEKozIwBNaNuHoH6C-ldi87xsPgJiFgYbUObkqz8aKMNRl2jF9JcNrOCynUaEEdf-Td4_8aCk3u_zp_s-ZGD4sFkgbgSJpFTkxmvCCGrKKMn2sS3oe516JXZ3RMbT6EjSBQbrT9Bf6TpnzUQg",
-              },
-              {
-                name: "Mike and Jen R.",
-                quote:
-                  "We found the perfect builder through this app. The entire process was seamless from start to finish.",
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA9aPD2Fgwg64WVy6Vr4a5zdv1PFLDAjR5D83yVRLY4p4xM7m09tKX15EByUgJhbIa0xtPNdMRweXyhSDDsERKhsE92ovfZk2DYPfMYRBgoRhut7w0FhUwuJYShNuQmafchrV40z3V8ddCoI7vFROzlrL5ofegpHrSN5OMZqwjNykxNIssIaIYX22NT_VSK0dP5ruFqQtIcGUd5WRNlZK2jJh8Cwe-hw1tIVaOZot37vXZCoE4aDUUnM6Zwx-4fDe107fWCHolKr_Q",
-              },
-              {
-                name: "David C.",
-                quote:
-                  "Navigating the permits was my biggest fear, but the guidance provided made it surprisingly straightforward.",
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCTLCBubiv0XF6hTgBsq_7AnKPDnQTKhibB-Mq_SGsCmKL9-uJsAwYUR6JCfZO2ZXBU-At77n5G_0BE6rKgenDdrb707DeFAHygJVGRQ8Mg_8P84CKKThVOXqeT_tg99HPgXzGit3CJ9Ck9Gfv9yyeY_8qgYbnGa2n4F7lViN8iJUpSlNOtLlKglCM4LpitL1lRx8BYeCjXS_FehlERaqiiKVkqo0XN_lLAJRKfhPUj1vPF6keTXXC6s1F5AjE0mHyNQvB1Xm3ShVM",
-              },
-            ].map((t, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center">
-                <div
-                  className="w-24 h-24 rounded-full bg-cover bg-center mb-6 shadow-md"
-                  style={{ backgroundImage: `url(${t.img})` }}
-                ></div>
-                <p className="text-slate-600 mb-4 italic">"{t.quote}"</p>
-                <p className="font-bold text-slate-900">{t.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-12 px-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">

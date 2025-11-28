@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 import { api } from "../services/api";
 import { Task, Project } from "../types";
 import PlanPicker from "../components/PlanPicker";
@@ -32,9 +33,11 @@ const TasksPage: React.FC = () => {
     setLoading(true);
     try {
       await api.generateProjectTemplate(project.id, planType);
+      toast.success("Project plan generated!");
       await fetch();
     } catch (error) {
       console.error("Failed to generate plan", error);
+      toast.error("Failed to generate plan. Please try again.");
       setLoading(false);
     }
   };
@@ -45,9 +48,12 @@ const TasksPage: React.FC = () => {
         try {
             setLoading(true);
             await api.resetProject(project.id);
+            setTasks([]); // Optimistic clear
+            toast.success("Project plan reset successfully.");
             await fetch();
         } catch (error) {
             console.error("Failed to reset project", error);
+            toast.error("Failed to reset project. Check permissions.");
             setLoading(false);
         }
     }

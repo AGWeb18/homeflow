@@ -95,3 +95,14 @@ export interface Quote {
   file_url?: string;
   contractor?: Contractor; // Joined
 }
+
+export interface Message {
+  id: string;
+  project_id: string;
+  sender_id: string;
+  contractor_id?: string | null;
+  content: string;
+  created_at: string;
+  read: boolean;
+  sender_role?: 'user' | 'contractor'; // For UI logic (inferred)
+}
