@@ -290,5 +290,22 @@ export const api = {
       .eq('id', projectId);
 
     if (error) throw error;
+  },
+
+  resetProject: async (projectId: string): Promise<void> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) throw new Error('User not authenticated');
+
+    // Delete all tasks
+    await supabase.from('tasks').delete().eq('project_id', projectId);
+    
+    // Delete all milestones
+    await supabase.from('milestones').delete().eq('project_id', projectId);
+
+    // Reset project stage and status
+    await supabase
+      .from('projects')
+      .update({ stage: null, status: 'Planning', progress: 0 })
+      .eq('id', projectId);
   }
 };

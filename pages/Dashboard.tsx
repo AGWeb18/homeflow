@@ -325,7 +325,10 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </div>
-                    <button className="text-sm text-primary font-medium hover:underline">
+                    <button 
+                      onClick={() => navigate(`/project/tasks/${task.id}`)}
+                      className="text-sm text-primary font-medium hover:underline"
+                    >
                       View Details
                     </button>
                   </div>

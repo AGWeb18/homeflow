@@ -24,6 +24,22 @@ const TasksPage: React.FC = () => {
     fetch();
   }, []);
 
+  const handleResetProject = async () => {
+    if (!project) return;
+    if (window.confirm("Are you sure you want to reset your project? This will delete all tasks and milestones. This action cannot be undone.")) {
+        try {
+            setLoading(true);
+            await api.resetProject(project.id);
+            await fetch();
+            // Since reset clears tasks, we might want to redirect or show a specific empty state, 
+            // but fetching will just show empty task list which is fine.
+        } catch (error) {
+            console.error("Failed to reset project", error);
+            setLoading(false);
+        }
+    }
+  };
+
   const toggleComplete = async (e: React.MouseEvent, task: Task) => {
     e.stopPropagation(); // Prevent navigation when clicking button
     try {
@@ -39,7 +55,18 @@ const TasksPage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Tasks for {project.name}</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Tasks for {project.name}</h1>
+        {tasks.length > 0 && (
+            <button 
+                onClick={handleResetProject}
+                className="text-sm text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors flex items-center gap-1"
+            >
+                <span className="material-symbols-outlined text-lg">restart_alt</span>
+                Reset Project Plan
+            </button>
+        )}
+      </div>
       <div className="space-y-3">
         {tasks.length === 0 && (
           <div className="text-slate-500">No tasks yet</div>
