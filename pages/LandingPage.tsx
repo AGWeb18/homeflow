@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../components/AuthProvider";
 import MapPreview from "../components/MapPreview";
 
@@ -7,6 +7,21 @@ const LandingPage = () => {
   const { user } = useAuth();
   const [address, setAddress] = useState("");
   const [isAnalyzed, setIsAnalyzed] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && location.state.scrollTo) {
+      const element = document.getElementById(location.state.scrollTo);
+      if (element) {
+        // Small delay to ensure render
+        setTimeout(() => {
+            element.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+        // Clear state to avoid scrolling on refresh? 
+        // Actually, navigation replaces history so it might persist, but that's okay for now.
+      }
+    }
+  }, [location]);
 
   const handleAnalyze = () => {
     if (address.length > 5) {

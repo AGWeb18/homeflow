@@ -1,9 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 
 const Header = () => {
   const { user } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleScrollTo = (elementId: string) => {
+    if (location.pathname === "/") {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      navigate("/", { state: { scrollTo: elementId } });
+    }
+  };
 
   return (
     <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200 sticky top-0 z-50">
@@ -27,12 +40,12 @@ const Header = () => {
 
       <div className="flex items-center gap-4 sm:gap-8">
         <nav className="hidden md:flex items-center gap-6">
-          <a
-            href="/#how-it-works"
+          <button
+            onClick={() => handleScrollTo("how-it-works")}
             className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
           >
             How it Works
-          </a>
+          </button>
           <Link
             to="/features"
             className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
