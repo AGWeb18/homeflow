@@ -5,6 +5,8 @@ export interface User {
   avatar_url?: string;
 }
 
+export type ProjectStage = 'idea' | 'feasibility' | 'design' | 'permitting' | 'procurement' | 'construction' | 'closeout';
+
 export interface Project {
   id: string;
   user_id: string;
@@ -12,6 +14,8 @@ export interface Project {
   address: string;
   status: 'Planning' | 'Permitting' | 'Construction' | 'Completed';
   progress: number;
+  stage?: ProjectStage | null; // ADU/extension project stage; null means computed from tasks
+  project_type?: string; // 'adu', 'extension', 'renovation', etc.
 }
 
 export interface Contractor {
@@ -43,6 +47,7 @@ export interface Task {
   title: string;
   due_date: string;
   completed: boolean;
+  stage?: string; // Optional: tag task with stage ('permitting', 'design', etc.)
 }
 
 export interface Expense {

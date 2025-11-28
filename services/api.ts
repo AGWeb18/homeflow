@@ -1,4 +1,4 @@
-import { User, Project, Task, Milestone, Contractor } from '../types';
+import { User, Project, Task, Milestone, Contractor, ProjectStage } from '../types';
 import { supabase } from '../lib/supabase';
 
 export const api = {
@@ -203,6 +203,70 @@ export const api = {
     if (!session?.user) throw new Error('User not authenticated');
 
     const { error } = await supabase.from('tasks').update({ completed }).eq('id', taskId);
+    if (error) throw error;
+  },
+
+  getProjectStage: async (projectId: string): Promise<ProjectStage | null> => {
+    // Fetch project and tasks
+    const { data: project } = await supabase
+      .from('projects')
+      .select('stage')
+      .eq('id', projectId)
+      .maybeSingle();
+
+    // If explicit stage set, return it
+    if (project?.stage) {
+      return project.stage as ProjectStage;
+    }
+
+    // Compute stage from tasks
+    const tasks = await api.getTasks(projectId);
+
+    if (tasks.length === 0) return 'idea';
+
+    // Check for incomplete tasks by common stage keywords
+    const stageKeywords: Record<ProjectStage, string[]> = {
+      'feasibility': ['feasibility', 'survey', 'assessment', 'zoning'],
+      'design': ['design', 'schematic', 'development', 'construction documents'],
+      'permitting': ['permit', 'application', 'review', 'approval'],
+      'procurement': ['tender', 'procurement', 'contractor', 'quote', 'rfc'],
+      'construction': ['construction', 'foundation', 'framing', 'inspection', 'rough-in'],
+      'closeout': ['closeout', 'final', 'occupancy', 'handover'],
+      'idea': [], // catch-all
+    };
+
+    // Determine highest priority incomplete stage
+    const stageOrder: ProjectStage[] = ['feasibility', 'design', 'permitting', 'procurement', 'construction', 'closeout'];
+
+    for (const stage of stageOrder) {
+      const keywords = stageKeywords[stage];
+      const stageTasksIncomplete = tasks.filter((t) => {
+        if (t.completed) return false;
+        return keywords.some((kw) => t.title.toLowerCase().includes(kw));
+      });
+
+      if (stageTasksIncomplete.length > 0) {
+        return stage;
+      }
+    }
+
+    // If all tasks complete, return closeout
+    if (tasks.every((t) => t.completed)) {
+      return 'closeout';
+    }
+
+    return 'idea';
+  },
+
+  setProjectStage: async (projectId: string, stage: ProjectStage | null): Promise<void> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.user) throw new Error('User not authenticated');
+
+    const { error } = await supabase
+      .from('projects')
+      .update({ stage })
+      .eq('id', projectId);
+
     if (error) throw error;
   }
 };

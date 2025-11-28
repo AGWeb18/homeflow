@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
-import { User, Project, Task, Milestone, Contractor } from "../types";
+import {
+  User,
+  Project,
+  Task,
+  Milestone,
+  Contractor,
+  ProjectStage,
+} from "../types";
 import CreateProjectModal from "../components/CreateProjectModal";
 import NextStep from "../components/NextStep";
 import PlanPicker from "../components/PlanPicker";
+import ProjectStageComponent from "../components/ProjectStage";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [stageLoading, setStageLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [project, setProject] = useState<Project | null>(null);
+  const [projectStage, setProjectStage] = useState<ProjectStage | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [team, setTeam] = useState<Contractor[]>([]);
@@ -34,14 +44,17 @@ const Dashboard = () => {
       setProject(projectData);
 
       if (projectData) {
-        const [tasksData, milestonesData, teamData] = await Promise.all([
-          api.getTasks(projectData.id),
-          api.getMilestones(projectData.id),
-          api.getTeam(projectData.id),
-        ]);
+        const [tasksData, milestonesData, teamData, stageData] =
+          await Promise.all([
+            api.getTasks(projectData.id),
+            api.getMilestones(projectData.id),
+            api.getTeam(projectData.id),
+            api.getProjectStage(projectData.id),
+          ]);
         setTasks(tasksData);
         setMilestones(milestonesData);
         setTeam(teamData);
+        setProjectStage(stageData);
       } else {
         // Check for pending address from landing page
         const pendingAddress = localStorage.getItem("pendingProjectAddress");
@@ -87,6 +100,19 @@ const Dashboard = () => {
     } catch (error) {
       console.error("Failed to generate plan", error);
       setLoading(false);
+    }
+  };
+
+  const handleStageChange = async (stage: ProjectStage | null) => {
+    if (!project) return;
+    setStageLoading(true);
+    try {
+      await api.setProjectStage(project.id, stage);
+      setProjectStage(stage || (await api.getProjectStage(project.id)));
+    } catch (error) {
+      console.error("Failed to update stage", error);
+    } finally {
+      setStageLoading(false);
     }
   };
 
@@ -225,6 +251,13 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Project Stage */}
+          <ProjectStageComponent
+            currentStage={projectStage}
+            onStageChange={handleStageChange}
+            isLoading={stageLoading}
+          />
+
           {/* Progress Card */}
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">

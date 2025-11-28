@@ -164,6 +164,13 @@ const PermitGuide: React.FC = () => {
       }
     }
 
+    // Set project stage to 'permitting' since user is now adding permit tasks
+    try {
+      await api.setProjectStage(project.id, "permitting");
+    } catch (e) {
+      console.warn("Failed to set project stage", e);
+    }
+
     // Reload tasks
     const t = await api.getTasks(project.id);
     setProjectTasks(t || []);
