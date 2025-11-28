@@ -1,42 +1,128 @@
 {
   "standard": {
     "id": "standard",
-    "name": "Standard Plan",
-    "description": "A quick, general-purpose renovation plan with common tasks and milestones.",
+    "name": "Ontario ADU Master Plan",
+    "description": "A comprehensive, step-by-step roadmap for building an Accessory Dwelling Unit in Ontario. Covers feasibility, design, permits, and construction.",
     "tasks": [
-      { 
-        "title": "Site Survey & Assessment", 
-        "offset_days": 7,
-        "description": "Hire a professional land surveyor to prepare a boundary and topographic survey. This document is essential for design and permits. It shows exact property lines, existing buildings, trees, and utility easements. Action: Search for 'Land Surveyor [Your City]', request a quote, and upload the final survey PDF to the Documents page.",
-        "diy_guidance": "While you cannot create a legal survey yourself, you can save money by locating existing survey pins (iron bars) on your property corners and clearing brush around them so the surveyor spends less time searching. You can also purchase existing surveys from landregistry.ca for ~$30 to give the surveyor a head start.",
-        "cost_savings": "$200 - $400 in surveyor billable hours"
+      {
+        "title": "1.1 Check Zoning & Setbacks",
+        "offset_days": 1,
+        "description": "Verify your property's eligibility for an ADU. Check your municipality's zoning bylaw for 'Secondary Dwelling Units' or 'Garden Suites'. Key metrics: Rear yard setback (usually 0.6m - 1.5m), lot coverage (max % of lot area), and building height. Action: Visit your city's planning website or call the zoning desk.",
+        "diy_guidance": "You can do this entirely yourself for free. Use your property survey and the online zoning map to measure distances. No need to hire a planner yet unless your lot is complex.",
+        "cost_savings": "$300 - $1,000 (Planner Consultation)"
       },
       { 
-        "title": "Architectural Design & Permits", 
-        "offset_days": 30,
-        "description": "Work with an architect or designer to create the blueprints for your project. These drawings must comply with local zoning and building codes. Action: Interview designers, review their work, and once finalized, upload your design drawings to the Documents page.",
-        "diy_guidance": "In Ontario, you are legally allowed to design your own home (BCIN exemption). You can use software like SketchUp or Chief Architect to draw the plans yourself. However, you are fully liable for code compliance. This is high-effort but high-reward.",
+        "title": "1.2 Locate or Order Survey", 
+        "offset_days": 5,
+        "description": "A legal survey is required for design and permits. It shows exact property lines. Action: Check your purchase documents for an existing survey. If none, hire a Land Surveyor.",
+        "diy_guidance": "Save money by finding the iron survey bars on your property corners yourself and clearing brush around them. You can also buy a copy of an old survey from LandRegistry.ca (~$30) which might suffice for preliminary design, though a new one is often needed for the final permit.",
+        "cost_savings": "$300 (Surveyor Hourly Savings)"
+      },
+      {
+        "title": "2.1 Create Site Plan",
+        "offset_days": 15,
+        "description": "Draw a 'Site Plan' showing your lot, existing house, and the proposed ADU. Must include dimensions, setbacks to property lines, and location of services. Action: Draw this to scale (e.g., 1/4\" = 1').",
+        "diy_guidance": "You can draw this yourself! Use graph paper or free software like SketchUp. As long as it is legible, to scale, and accurate, the city will accept it for simple projects.",
+        "cost_savings": "$500 - $1,500 (Drafting Fees)"
+      },
+      {
+        "title": "2.2 Design Floor Plans & Elevations",
+        "offset_days": 25,
+        "description": "Create detailed drawings of the ADU: Floor plans, 4 exterior elevations, and cross-sections. Must show compliance with Ontario Building Code (OBC). Action: Define room sizes, window locations, and insulation details.",
+        "diy_guidance": "Under the BCIN exemption, you are legally allowed to design your own home/ADU in Ontario. You assume full responsibility for code compliance. If you are detail-oriented and willing to learn the OBC, you can skip the designer.",
         "cost_savings": "$3,000 - $8,000 (Designer Fees)"
       },
-      { 
-        "title": "Foundation Pour", 
-        "offset_days": 45,
-        "description": "The first major construction step. Excavation is done, footings are inspected, and concrete is poured to create the base of your structure. Action: Ensure your contractor has scheduled the required municipal foundation inspection before pouring concrete.",
-        "diy_guidance": "Act as your own General Contractor: Instead of hiring a builder to manage this, hire the excavation company and the concrete forming company directly. You handle the schedule and inspection booking.",
-        "cost_savings": "15% - 20% (GC Management Fee)"
+      {
+        "title": "2.3 HVAC Heat Loss Calculation",
+        "offset_days": 35,
+        "description": "Commission a Heat Loss/Heat Gain calculation and Ventilation design. This ensures your heating system is sized correctly. Action: Hire a licensed HVAC designer (BCIN holder). This is rarely a DIY task.",
+        "diy_guidance": "While difficult to DIY, you can save money by providing the HVAC designer with perfect, clear plans so they don't have to redraw them.",
+        "cost_savings": "Minimal"
       },
-      { 
-        "title": "Framing & Structural Work", 
+      {
+        "title": "3.1 Submit Permit Application",
+        "offset_days": 45,
+        "description": "Compile your package: Application to Construct form, Schedule 1, Site Plan, Drawings, and HVAC calc. Action: Submit to your municipality's building portal and pay the intake fee.",
+        "diy_guidance": "Be your own applicant. Fill out the forms yourself. Agents charge a premium just to stand in line or upload files for you.",
+        "cost_savings": "$500 - $1,500 (Permit Runner Fees)"
+      },
+      {
+        "title": "4.1 Create Scope of Work",
         "offset_days": 60,
-        "description": "The 'skeleton' of the building goes up. Walls, floors, and the roof structure are built. At the end of this stage, the shape of the room is visible. Action: Walk through with your contractor to verify window and door placements before electrical/plumbing rough-ins begin.",
-        "diy_guidance": "If you are handy, you can assist with site cleanup and material moving, which reduces paid labour hours. However, framing requires skill. The biggest saving comes from sourcing lumber yourself if you can find deals, though contractors often get trade discounts.",
-        "cost_savings": "$500 - $1,000 (Labour assistance)"
+        "description": "Write a detailed list of exactly what needs to be built. Include materials (e.g., 'Vinyl siding, color gray', 'Laminate flooring'). Action: Create a spreadsheet listing every task to send to contractors.",
+        "diy_guidance": "The more detailed your scope, the more accurate your quotes. Doing this yourself puts you in control and prevents 'extras' later.",
+        "cost_savings": "$1,000+ (Project Management)"
+      },
+      {
+        "title": "4.2 Request Contractor Quotes",
+        "offset_days": 65,
+        "description": "Send your Scope of Work and Drawings to at least 3 contractors. Action: Schedule site visits and ask for fixed-price quotes.",
+        "diy_guidance": "Manage the tender process yourself. You are effectively the Project Manager. Compare line items carefully.",
+        "cost_savings": "10% - 15% (PM Fee)"
+      },
+      {
+        "title": "5.1 Site Prep & Demolition",
+        "offset_days": 90,
+        "description": "Prepare the area for construction. Remove sheds, trees (if permitted), decks, or debris. Action: Clear the workspace completely.",
+        "diy_guidance": "High sweat equity potential! You can do all the clearing, fence removal, and basic demolition yourself. Rent a bin and fill it up.",
+        "cost_savings": "$1,000 - $3,000 (General Labour)"
+      },
+      {
+        "title": "5.2 Excavation & Foundation",
+        "offset_days": 100,
+        "description": "Digging the hole and pouring concrete. Action: Coordinate the excavator and formwork crew. Ensure municipal inspection happens BEFORE pouring concrete.",
+        "diy_guidance": "Act as GC: Hire the excavator and concrete crew directly rather than paying a builder to call them.",
+        "cost_savings": "20% markup on subs"
+      },
+      {
+        "title": "5.3 Framing & Shell",
+        "offset_days": 115,
+        "description": "Building the wood structure, roof, and installing windows/doors. Action: Reach 'Lock-up' stage where the building is weather-tight.",
+        "diy_guidance": "You can assist with moving lumber and site cleanup. Installing windows can be DIY if you are handy, but framing the roof is best left to pros.",
+        "cost_savings": "$500 - $2,000 (Helper Labour)"
+      },
+      {
+        "title": "6.1 Rough-in Inspections",
+        "offset_days": 130,
+        "description": "Plumbing, Electrical, and HVAC systems installed inside walls. Action: Call for 'Rough-in' inspections (Building + ESA for electrical). Do not drywall until passed.",
+        "diy_guidance": "You can run your own electrical (ESA permits homeowner permits) if you own and live in the property, but rules are strict. Plumbing is harder to DIY legally/safely.",
+        "cost_savings": "$3,000+ (If DIY Electrical)"
+      },
+      {
+        "title": "7.1 Insulation & Vapor Barrier",
+        "offset_days": 135,
+        "description": "Install batts/spray foam and the vapor barrier. Action: Ensure continuity of the air barrier. Call for Insulation Inspection.",
+        "diy_guidance": "Very DIY-able. Batt insulation is easy to install. Wear protective gear. Save huge on labour.",
+        "cost_savings": "$1,500 - $2,500"
+      },
+      {
+        "title": "7.2 Drywall & Taping",
+        "offset_days": 145,
+        "description": "Boarding walls and ceilings, taping joints, and sanding. Action: Create smooth, paint-ready surfaces.",
+        "diy_guidance": "A classic DIY task. Hanging board is heavy but simple. Taping requires skill to look good—consider hiring a taper if you want a perfect finish, but hanging yourself saves money.",
+        "cost_savings": "$2,000 - $4,000"
+      },
+      {
+        "title": "7.3 Flooring & Painting",
+        "offset_days": 155,
+        "description": "Install finish flooring and paint walls/trim. Action: Lay laminate/vinyl and apply 2 coats of paint.",
+        "diy_guidance": "100% DIY territory. Vinyl plank flooring clicks together easily. Painting is the highest return-on-effort DIY task.",
+        "cost_savings": "$2,500 - $5,000"
+      },
+      {
+        "title": "8.1 Final Inspections & Occupancy",
+        "offset_days": 170,
+        "description": "Final building inspection, ESA final, and closing permits. Action: Walk through with the inspector. Obtain Occupancy Permit.",
+        "diy_guidance": "Coordinate this yourself. Ensure all paperwork (HVAC balance sheets, ESA cert) is on site.",
+        "cost_savings": "Time & Org"
       }
     ],
     "milestones": [
-      { "title": "Design Approved", "offset_days": 14, "status": "Pending" },
-      { "title": "Permit Issued", "offset_days": 30, "status": "Pending" },
-      { "title": "Lock-Up Stage", "offset_days": 75, "status": "Upcoming" }
+      { "title": "Feasibility Confirmed", "offset_days": 14, "status": "Pending" },
+      { "title": "Permit Application Submitted", "offset_days": 45, "status": "Pending" },
+      { "title": "Permit Issued", "offset_days": 75, "status": "Pending" },
+      { "title": "Lock-Up (Shell Complete)", "offset_days": 120, "status": "Upcoming" },
+      { "title": "Occupancy Granted", "offset_days": 180, "status": "Upcoming" }
     ]
   },
   "catalogue": {
