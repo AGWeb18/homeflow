@@ -67,6 +67,25 @@ export const api = {
     return [];
   },
 
+  getTask: async (taskId: string): Promise<Task | null> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user && taskId) {
+         const { data: task, error } = await supabase
+            .from('tasks')
+            .select('*')
+            .eq('id', taskId)
+            .single();
+            
+         if (error) {
+             console.error('Error fetching task:', error);
+             return null;
+         }
+         return (task as Task) || null;
+    }
+
+    return null;
+  },
+
   getMilestones: async (projectId: string): Promise<Milestone[]> => {
     const { data: { session } } = await supabase.auth.getSession();
     if (session?.user && projectId) {
