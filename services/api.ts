@@ -190,10 +190,21 @@ export const api = {
   },
 
   generateProjectTemplate: async (projectId: string, planType: string = 'standard'): Promise<void> => {
-    // Load plan templates from repo data. This keeps templates editable.
-    const plansModule = await import('../data/plans.json');
-    const plans: any = plansModule.default || plansModule;
-    const template = plans[planType] || plans['standard'];
+    // Fetch template from DB
+    const { data: tasksData, error: taskError } = await supabase
+      .from('template_tasks')
+      .select('*')
+      .eq('template_id', planType);
+
+    const { data: milestonesData, error: milestoneError } = await supabase
+      .from('template_milestones')
+      .select('*')
+      .eq('template_id', planType);
+
+    if (taskError || milestoneError) {
+        console.error("Error fetching template", taskError, milestoneError);
+        throw new Error("Failed to load template");
+    }
 
     const addDays = (d: Date, days: number) => {
       const copy = new Date(d);
@@ -203,17 +214,18 @@ export const api = {
 
     const today = new Date();
 
-    const tasks = (template.tasks || []).map((t: any) => ({
+    const tasks = (tasksData || []).map((t: any) => ({
       project_id: projectId,
       title: t.title,
       description: t.description || null,
       diy_guidance: t.diy_guidance || null,
       cost_savings: t.cost_savings || null,
+      resources: t.resources || [], // Now supported in SQL
       due_date: addDays(today, t.offset_days || 0).toISOString().split('T')[0],
       completed: false
     }));
 
-    const milestones = (template.milestones || []).map((m: any) => ({
+    const milestones = (milestonesData || []).map((m: any) => ({
       project_id: projectId,
       title: m.title,
       date: addDays(today, m.offset_days || 0).toISOString().split('T')[0],

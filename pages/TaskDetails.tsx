@@ -3,57 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { Task } from "../types";
 
-// Hardcoded resource mapping for the pilot
-const TASK_RESOURCES: Record<string, { name: string; url: string }[]> = {
-  "1.1 Check Zoning & Setbacks": [
-    { name: "Toronto Zoning Map", url: "https://map.toronto.ca/maps/map.jsp?app=Zoning" },
-    { name: "Kawartha Lakes Zoning", url: "https://www.kawarthalakes.ca/en/business-growth/zoning-bylaws.aspx" },
-    { name: "Ontario ADU Guide", url: "https://www.ontario.ca/page/add-second-unit-your-house" }
-  ],
-  "1.2 Locate or Order Survey": [
-    { name: "Find a Surveyor (AOLS)", url: "https://www.aols.org/find-a-surveyor" },
-    { name: "Land Registry (Buy Survey)", url: "https://www.onland.ca/ui/" }
-  ],
-  "2.1 Create Site Plan": [
-    { name: "Open Plan Editor", url: "/#/editor" }, // Internal Link
-    { name: "SketchUp Free", url: "https://www.sketchup.com/plans-and-pricing/sketchup-free" }
-  ],
-  "2.2 Design Floor Plans & Elevations": [
-    { name: "BCIN Designers Directory", url: "https://www.qusts.com/ontario-bcin-designers/" },
-    { name: "OBC Part 9 Guide", url: "https://www.ontario.ca/document/build-or-renovate-your-home" }
-  ],
-  "2.3 HVAC Heat Loss Calculation": [
-    { name: "HRAI Contractor Locator", url: "https://www.hrai.ca/find-a-contractor" }
-  ],
-  "3.1 Submit Permit Application": [
-    { name: "Toronto Building Permit Guide", url: "https://www.toronto.ca/services-payments/building-construction/apply-for-a-building-permit/" },
-    { name: "Kawartha Lakes Building Dept", url: "https://www.kawarthalakes.ca/en/living-here/building-permits.aspx" }
-  ],
-  "4.1 Create Scope of Work": [
-    { name: "Scope of Work Template (Google Docs)", url: "https://docs.google.com/document/create" }, // Placeholder for generic tool
-    { name: "CMHC Renovation Guide", url: "https://www.cmhc-schl.gc.ca/consumers/home-buying/renovating" }
-  ],
-  "4.2 Request Contractor Quotes": [
-    { name: "Browse HomeFlow Contractors", url: "/#/contractors" },
-    { name: "Contractor Check (Consumer Protection)", url: "https://www.ontario.ca/page/hiring-contractor" }
-  ],
-  "5.1 Site Prep & Demolition": [
-    { name: "Call Before You Dig (Ontario One Call)", url: "https://www.ontarioonecall.ca/" }
-  ],
-  "5.2 Excavation & Foundation": [
-    { name: "Concrete Ontario Guide", url: "https://www.concreteontario.org/" }
-  ],
-  "6.1 Rough-in Inspections": [
-    { name: "Electrical Safety Authority (ESA)", url: "https://esasafe.com/" }
-  ],
-  "7.1 Insulation & Vapor Barrier": [
-    { name: "Insulation Rebates (Enbridge)", url: "https://www.enbridgegas.com/residential/rebates-energy-conservation/home-efficiency-rebate-plus" }
-  ],
-  "8.1 Final Inspections & Occupancy": [
-    { name: "Request Final Inspection (Toronto)", url: "https://www.toronto.ca/services-payments/building-construction/building-inspections/booking-an-inspection/" }
-  ]
-};
-
 const TaskDetails: React.FC = () => {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
@@ -86,7 +35,7 @@ const TaskDetails: React.FC = () => {
   if (loading) return <div className="p-6">Loading task details...</div>;
   if (!task) return <div className="p-6">Task not found.</div>;
 
-  const resources = TASK_RESOURCES[task.title] || [];
+  const resources = task.resources || [];
 
   return (
     <div className="max-w-3xl mx-auto p-6">
