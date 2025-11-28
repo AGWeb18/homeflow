@@ -33,6 +33,7 @@ const ELEMENT_TEMPLATES = {
     zIndex: 10,
   },
   structural: { width: 40, height: 10, color: "bg-slate-800", zIndex: 5 }, // Doors/Windows
+  area: { width: 300, height: 200, color: "bg-indigo-50/50 border-2 border-dashed border-indigo-400", zIndex: 0 },
 };
 
 const PlanEditor = () => {
@@ -87,14 +88,14 @@ const PlanEditor = () => {
   }, []);
 
   const addElement = (
-    type: "room" | "furniture" | "structural",
+    type: "room" | "furniture" | "structural" | "area",
     subType: string,
     label: string
   ) => {
-    const template = ELEMENT_TEMPLATES[type];
+    const template = ELEMENT_TEMPLATES[type as keyof typeof ELEMENT_TEMPLATES];
     const newElement: PlanElement = {
       id: Date.now().toString(),
-      type,
+      type: type as any,
       subType,
       label,
       x: 100 + elements.length * 10,
@@ -179,6 +180,15 @@ const PlanEditor = () => {
                 crop_square
               </span>{" "}
               Room
+            </button>
+            <button
+              onClick={() => addElement("area", "area", "Area")}
+              className="flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold text-slate-700"
+            >
+              <span className="material-symbols-outlined text-sm">
+                check_box_outline_blank
+              </span>{" "}
+              Custom Area
             </button>
             <button
               onClick={() => addElement("structural", "door", "")}
@@ -276,6 +286,13 @@ const PlanEditor = () => {
                   }}
                 >
                   {el.label}
+                  {/* Show dimensions for rooms/areas */}
+                  {(el.type === 'room' || el.type === 'area') && (
+                    <div className="absolute bottom-1 right-2 text-[10px] font-mono text-slate-400 pointer-events-none bg-white/50 px-1 rounded">
+                        {Math.round(el.width / 10)}' x {Math.round(el.height / 10)}'
+                    </div>
+                  )}
+                  
                   {/* Simple Rotate Handle Visual (not functional via drag, controlled by sidebar) */}
                   {selectedId === el.id && (
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-6 h-6 bg-white rounded-full border border-slate-300 flex items-center justify-center shadow-sm">
