@@ -48,6 +48,7 @@ export interface Task {
   description?: string;
   diy_guidance?: string;
   cost_savings?: string;
+  resources?: { name: string; url: string }[];
   due_date: string;
   completed: boolean;
   stage?: string; // Optional: tag task with stage ('permitting', 'design', etc.)

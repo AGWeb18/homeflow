@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 
 // Lazy load pages
 const LandingPage = lazy(() => import("./pages/LandingPage"));
+const Features = lazy(() => import("./pages/Features"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const PermitGuide = lazy(() => import("./pages/PermitGuide"));
 const Contractors = lazy(() => import("./pages/Contractors"));
@@ -50,6 +51,7 @@ export default function App() {
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/features" element={<Features />} />
             <Route path="/login" element={<Login />} />
           </Route>
 

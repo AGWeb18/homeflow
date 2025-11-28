@@ -28,17 +28,17 @@ const Header = () => {
       <div className="flex items-center gap-4 sm:gap-8">
         <nav className="hidden md:flex items-center gap-6">
           <a
-            href="#how-it-works"
+            href="/#how-it-works"
             className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
           >
             How it Works
           </a>
-          <a
-            href="#features"
+          <Link
+            to="/features"
             className="text-sm font-medium text-slate-600 hover:text-primary transition-colors"
           >
             Features
-          </a>
+          </Link>
         </nav>
 
         {user ? (
