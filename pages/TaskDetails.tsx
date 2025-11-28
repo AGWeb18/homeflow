@@ -18,12 +18,39 @@ const TASK_RESOURCES: Record<string, { name: string; url: string }[]> = {
     { name: "Open Plan Editor", url: "/#/editor" }, // Internal Link
     { name: "SketchUp Free", url: "https://www.sketchup.com/plans-and-pricing/sketchup-free" }
   ],
+  "2.2 Design Floor Plans & Elevations": [
+    { name: "BCIN Designers Directory", url: "https://www.qusts.com/ontario-bcin-designers/" },
+    { name: "OBC Part 9 Guide", url: "https://www.ontario.ca/document/build-or-renovate-your-home" }
+  ],
   "2.3 HVAC Heat Loss Calculation": [
     { name: "HRAI Contractor Locator", url: "https://www.hrai.ca/find-a-contractor" }
   ],
   "3.1 Submit Permit Application": [
     { name: "Toronto Building Permit Guide", url: "https://www.toronto.ca/services-payments/building-construction/apply-for-a-building-permit/" },
     { name: "Kawartha Lakes Building Dept", url: "https://www.kawarthalakes.ca/en/living-here/building-permits.aspx" }
+  ],
+  "4.1 Create Scope of Work": [
+    { name: "Scope of Work Template (Google Docs)", url: "https://docs.google.com/document/create" }, // Placeholder for generic tool
+    { name: "CMHC Renovation Guide", url: "https://www.cmhc-schl.gc.ca/consumers/home-buying/renovating" }
+  ],
+  "4.2 Request Contractor Quotes": [
+    { name: "Browse HomeFlow Contractors", url: "/#/contractors" },
+    { name: "Contractor Check (Consumer Protection)", url: "https://www.ontario.ca/page/hiring-contractor" }
+  ],
+  "5.1 Site Prep & Demolition": [
+    { name: "Call Before You Dig (Ontario One Call)", url: "https://www.ontarioonecall.ca/" }
+  ],
+  "5.2 Excavation & Foundation": [
+    { name: "Concrete Ontario Guide", url: "https://www.concreteontario.org/" }
+  ],
+  "6.1 Rough-in Inspections": [
+    { name: "Electrical Safety Authority (ESA)", url: "https://esasafe.com/" }
+  ],
+  "7.1 Insulation & Vapor Barrier": [
+    { name: "Insulation Rebates (Enbridge)", url: "https://www.enbridgegas.com/residential/rebates-energy-conservation/home-efficiency-rebate-plus" }
+  ],
+  "8.1 Final Inspections & Occupancy": [
+    { name: "Request Final Inspection (Toronto)", url: "https://www.toronto.ca/services-payments/building-construction/building-inspections/booking-an-inspection/" }
   ]
 };
 
