@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { Task, Project } from "../types";
+import PlanPicker from "../components/PlanPicker";
 
 const TasksPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState<Project | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [showPlanPicker, setShowPlanPicker] = useState(false);
 
   const fetch = async () => {
     setLoading(true);
@@ -24,6 +26,19 @@ const TasksPage: React.FC = () => {
     fetch();
   }, []);
 
+  const handleGeneratePlan = async (planType: "standard" | "catalogue" | "custom") => {
+    if (!project) return;
+    setShowPlanPicker(false);
+    setLoading(true);
+    try {
+      await api.generateProjectTemplate(project.id, planType);
+      await fetch();
+    } catch (error) {
+      console.error("Failed to generate plan", error);
+      setLoading(false);
+    }
+  };
+
   const handleResetProject = async () => {
     if (!project) return;
     if (window.confirm("Are you sure you want to reset your project? This will delete all tasks and milestones. This action cannot be undone.")) {
@@ -31,8 +46,6 @@ const TasksPage: React.FC = () => {
             setLoading(true);
             await api.resetProject(project.id);
             await fetch();
-            // Since reset clears tasks, we might want to redirect or show a specific empty state, 
-            // but fetching will just show empty task list which is fine.
         } catch (error) {
             console.error("Failed to reset project", error);
             setLoading(false);
@@ -69,7 +82,15 @@ const TasksPage: React.FC = () => {
       </div>
       <div className="space-y-3">
         {tasks.length === 0 && (
-          <div className="text-slate-500">No tasks yet</div>
+          <div className="text-center py-12 border-2 border-dashed border-slate-200 rounded-xl bg-slate-50">
+            <p className="text-slate-500 mb-4">No tasks found for this project.</p>
+            <button 
+                onClick={() => setShowPlanPicker(true)}
+                className="px-6 py-2 bg-primary hover:bg-primary-hover text-slate-900 font-bold rounded-lg shadow-sm transition-colors"
+            >
+                Generate Project Plan
+            </button>
+          </div>
         )}
         {tasks.map((t) => (
           <div
@@ -148,6 +169,11 @@ const TasksPage: React.FC = () => {
           </div>
         ))}
       </div>
+      <PlanPicker 
+        open={showPlanPicker} 
+        onClose={() => setShowPlanPicker(false)} 
+        onSelect={handleGeneratePlan} 
+      />
     </div>
   );
 };
