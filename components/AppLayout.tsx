@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react";
 import Sidebar from './Sidebar';
 
 const AppLayout = () => {
@@ -46,6 +47,7 @@ const AppLayout = () => {
 
         <main className="flex-1 overflow-y-auto p-4 sm:p-8 scroll-smooth">
           <Outlet />
+          <Analytics />
         </main>
       </div>
     </div>
