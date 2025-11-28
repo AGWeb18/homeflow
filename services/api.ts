@@ -1,4 +1,4 @@
-import { User, Project, Task, Milestone, Contractor, ProjectStage, ProjectDocument, BudgetItem, Expense } from '../types';
+import { User, Project, Task, Milestone, Contractor, ProjectStage, ProjectDocument, BudgetItem, Expense, Quote } from '../types';
 import { supabase } from '../lib/supabase';
 
 export const api = {
@@ -329,6 +329,50 @@ export const api = {
       .from('projects')
       .update({ stage: null, status: 'Planning', progress: 0 })
       .eq('id', projectId);
+  },
+
+  // Quotes
+  getQuotes: async (projectId: string): Promise<Quote[]> => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user && projectId) {
+         const { data, error } = await supabase
+            .from('quotes')
+            .select('*, contractor:contractors(*)')
+            .eq('project_id', projectId)
+            .order('received_date', { ascending: false });
+            
+         if (error) {
+             console.error('Error fetching quotes:', error);
+             return [];
+         }
+         return (data as Quote[]) || [];
+    }
+    return [];
+  },
+
+  createQuote: async (quote: Omit<Quote, 'id' | 'contractor'>): Promise<Quote> => {
+     const { data, error } = await supabase
+        .from('quotes')
+        .insert([quote])
+        .select('*, contractor:contractors(*)')
+        .single();
+
+     if (error) throw error;
+     return data as Quote;
+  },
+
+  updateQuoteStatus: async (id: string, status: 'pending' | 'accepted' | 'rejected'): Promise<void> => {
+     const { error } = await supabase
+        .from('quotes')
+        .update({ status })
+        .eq('id', id);
+        
+     if (error) throw error;
+  },
+
+  deleteQuote: async (id: string): Promise<void> => {
+     const { error } = await supabase.from('quotes').delete().eq('id', id);
+     if (error) throw error;
   },
 
   // Financials

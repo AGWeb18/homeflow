@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { Rnd } from "react-rnd";
 import { toast } from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router-dom";
+import { api } from "../services/api";
+import { Project } from "../types";
 
 interface PlanElement {
   id: string;
@@ -39,10 +41,14 @@ const PlanEditor = () => {
   const [elements, setElements] = useState<PlanElement[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
+  const [project, setProject] = useState<Project | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Load initial state or template
   useEffect(() => {
+    api.getProject().then(setProject);
+    
     const savedPlan = localStorage.getItem("customPlan");
     if (savedPlan) {
       setElements(JSON.parse(savedPlan));
@@ -114,9 +120,31 @@ const PlanEditor = () => {
     setSelectedId(null);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    // Save to localStorage for session persistence
     localStorage.setItem("customPlan", JSON.stringify(elements));
-    toast.success("Plan saved successfully!");
+    
+    if (!project) {
+        toast.success("Plan saved locally (create a project to upload)");
+        return;
+    }
+
+    setIsSaving(true);
+    try {
+        // Convert plan data to a Blob (JSON file for now, effectively a "save file")
+        const planData = JSON.stringify(elements, null, 2);
+        const blob = new Blob([planData], { type: 'application/json' });
+        const file = new File([blob], `Site_Plan_${new Date().toISOString().split('T')[0]}.json`, { type: 'application/json' });
+
+        // Upload to project documents
+        await api.uploadDocument(project.id, file);
+        toast.success("Plan saved and uploaded to Project Documents!");
+    } catch (err) {
+        console.error(err);
+        toast.error("Failed to upload plan to project");
+    } finally {
+        setIsSaving(false);
+    }
   };
 
   const handleClear = () => {

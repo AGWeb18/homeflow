@@ -82,3 +82,15 @@ export interface ProjectDocument {
   created_at: string;
   path: string; // Storage path
 }
+
+export interface Quote {
+  id: string;
+  project_id: string;
+  contractor_id: string;
+  title: string;
+  amount: number;
+  status: 'pending' | 'accepted' | 'rejected';
+  received_date: string;
+  file_url?: string;
+  contractor?: Contractor; // Joined
+}

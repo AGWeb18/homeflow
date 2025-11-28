@@ -3,6 +3,30 @@ import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 import { Task } from "../types";
 
+// Hardcoded resource mapping for the pilot
+const TASK_RESOURCES: Record<string, { name: string; url: string }[]> = {
+  "1.1 Check Zoning & Setbacks": [
+    { name: "Toronto Zoning Map", url: "https://map.toronto.ca/maps/map.jsp?app=Zoning" },
+    { name: "Kawartha Lakes Zoning", url: "https://www.kawarthalakes.ca/en/business-growth/zoning-bylaws.aspx" },
+    { name: "Ontario ADU Guide", url: "https://www.ontario.ca/page/add-second-unit-your-house" }
+  ],
+  "1.2 Locate or Order Survey": [
+    { name: "Find a Surveyor (AOLS)", url: "https://www.aols.org/find-a-surveyor" },
+    { name: "Land Registry (Buy Survey)", url: "https://www.onland.ca/ui/" }
+  ],
+  "2.1 Create Site Plan": [
+    { name: "Open Plan Editor", url: "/#/editor" }, // Internal Link
+    { name: "SketchUp Free", url: "https://www.sketchup.com/plans-and-pricing/sketchup-free" }
+  ],
+  "2.3 HVAC Heat Loss Calculation": [
+    { name: "HRAI Contractor Locator", url: "https://www.hrai.ca/find-a-contractor" }
+  ],
+  "3.1 Submit Permit Application": [
+    { name: "Toronto Building Permit Guide", url: "https://www.toronto.ca/services-payments/building-construction/apply-for-a-building-permit/" },
+    { name: "Kawartha Lakes Building Dept", url: "https://www.kawarthalakes.ca/en/living-here/building-permits.aspx" }
+  ]
+};
+
 const TaskDetails: React.FC = () => {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
@@ -34,6 +58,8 @@ const TaskDetails: React.FC = () => {
 
   if (loading) return <div className="p-6">Loading task details...</div>;
   if (!task) return <div className="p-6">Task not found.</div>;
+
+  const resources = TASK_RESOURCES[task.title] || [];
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -112,22 +138,41 @@ const TaskDetails: React.FC = () => {
             </div>
           )}
 
-          {/* Additional Resources Placeholder */}
-          <div>
-            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">
-              Resources
-            </h2>
-            <div className="flex flex-col gap-2">
-                <button className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors text-left group">
-                    <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">article</span>
-                    <span className="text-slate-700 font-medium text-sm">Read Guide: {task.title} (Coming Soon)</span>
-                </button>
-                <button className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors text-left group">
+          {/* Resources */}
+          {resources.length > 0 ? (
+            <div>
+                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">
+                Helpful Resources
+                </h2>
+                <div className="flex flex-col gap-2">
+                    {resources.map((res, idx) => (
+                        <a 
+                            key={idx} 
+                            href={res.url} 
+                            target={res.url.startsWith('/') ? "_self" : "_blank"}
+                            rel="noreferrer"
+                            className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors text-left group"
+                        >
+                            <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">
+                                {res.url.startsWith('/') ? 'app_shortcut' : 'open_in_new'}
+                            </span>
+                            <span className="text-slate-700 font-medium text-sm">{res.name}</span>
+                        </a>
+                    ))}
+                </div>
+            </div>
+          ) : (
+            /* Placeholder if no resources match */
+            <div>
+                <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">
+                Resources
+                </h2>
+                <button className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors text-left group w-full">
                     <span className="material-symbols-outlined text-slate-400 group-hover:text-primary">search</span>
                     <span className="text-slate-700 font-medium text-sm">Find Pros for {task.title}</span>
                 </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
