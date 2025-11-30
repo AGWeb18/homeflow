@@ -23,6 +23,7 @@ const Sidebar = ({ className = "", onClose }: SidebarProps) => {
     { name: "Find Professionals", icon: "groups", path: "/contractors" },
     { name: "Documents", icon: "folder_open", path: "/documents" },
     { name: "Messages", icon: "chat", path: "/messages" },
+    { name: "Settings", icon: "settings", path: "/settings" },
   ];
 
   return (

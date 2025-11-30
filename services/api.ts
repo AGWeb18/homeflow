@@ -566,5 +566,11 @@ export const api = {
       .remove([path]);
 
     if (error) throw error;
+  },
+
+  deleteAccount: async (): Promise<void> => {
+    const { error } = await supabase.rpc('delete_own_account');
+    if (error) throw error;
+    await supabase.auth.signOut();
   }
 };

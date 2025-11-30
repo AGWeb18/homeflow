@@ -22,6 +22,9 @@ const Messages = lazy(() => import("./pages/Messages"));
 const Tasks = lazy(() => import("./pages/Tasks"));
 const TaskDetails = lazy(() => import("./pages/TaskDetails"));
 const Quotes = lazy(() => import("./pages/Quotes"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Privacy = lazy(() => import("./pages/Privacy"));
 
 const LoadingFallback = () => (
   <div className="flex h-screen items-center justify-center bg-bg-light">
@@ -54,6 +57,8 @@ export default function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/features" element={<Features />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
           </Route>
 
           <Route element={<ProtectedRoute />}>
@@ -151,6 +156,14 @@ export default function App() {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <Messages />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <Settings />
                   </Suspense>
                 }
               />

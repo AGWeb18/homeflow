@@ -211,9 +211,13 @@ const LandingPage = () => {
             </div>
             <span className="font-bold text-slate-900">HomeFlow</span>
           </div>
-          <p className="text-sm text-slate-500">
-            © 2024 HomeFlow. All rights reserved.
-          </p>
+          <div className="flex items-center gap-6">
+            <Link to="/terms" className="text-sm text-slate-500 hover:text-slate-900">Terms</Link>
+            <Link to="/privacy" className="text-sm text-slate-500 hover:text-slate-900">Privacy</Link>
+            <p className="text-sm text-slate-500">
+                © 2024 HomeFlow. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
