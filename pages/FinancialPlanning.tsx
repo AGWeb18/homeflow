@@ -19,6 +19,12 @@ const FinancialPlanning = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loadingTracker, setLoadingTracker] = useState(false);
 
+  // ROI State
+  const [monthlyRent, setMonthlyRent] = useState(2500);
+  const [mortgageRate, setMortgageRate] = useState(5.5);
+  const [amortization, setAmortization] = useState(25);
+  const [downPayment, setDownPayment] = useState(20000);
+
   useEffect(() => {
     // Load project
     api.getProject().then(p => {
@@ -146,6 +152,20 @@ const FinancialPlanning = () => {
   const totalSpent = expenses.reduce((sum, item) => sum + item.amount, 0);
   const remaining = totalBudget - totalSpent;
 
+  // ROI Calculations
+  const loanAmount = estimatedCost - downPayment;
+  const monthlyRate = (mortgageRate / 100) / 12;
+  const numberOfPayments = amortization * 12;
+  const monthlyMortgage = loanAmount > 0 
+    ? (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / (Math.pow(1 + monthlyRate, numberOfPayments) - 1)
+    : 0;
+  
+  const monthlyExpenses = 200; // Insurance, Maintenance (placeholder)
+  const monthlyCashflow = monthlyRent - monthlyMortgage - monthlyExpenses;
+  const annualCashflow = monthlyCashflow * 12;
+  const roi = (annualCashflow / downPayment) * 100; // Cash-on-cash return
+  const capRate = ((monthlyRent * 12 - monthlyExpenses * 12) / estimatedCost) * 100;
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
@@ -161,15 +181,10 @@ const FinancialPlanning = () => {
 
       <div className="border-b border-slate-200 mb-8">
         <div className="flex gap-8">
-          {["Cost Estimator", "Budget Tracker", "Financing Options"].map((tab) => {
+          {["Cost Estimator", "Budget Tracker", "ROI Calculator"].map((tab) => {
             const id = tab.toLowerCase().replace(" ", "-");
-            const isActive =
-              activeTab === id ||
-              (id === "cost-estimator" && activeTab === "estimator") ||
-              (id === "budget-tracker" && activeTab === "tracker");
-            
             // Map ID to simple key
-            const key = id === "cost-estimator" ? "estimator" : id === "budget-tracker" ? "tracker" : "financing";
+            const key = id === "cost-estimator" ? "estimator" : id === "budget-tracker" ? "tracker" : "roi";
 
             return (
               <button
@@ -314,11 +329,83 @@ const FinancialPlanning = () => {
           </div>
       )}
 
-      {/* FINANCING TAB */}
-      {activeTab === "financing" && (
-          <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-              <h3 className="font-bold text-slate-900 text-lg mb-4">Financing Options</h3>
-              <p className="text-slate-500">Loan calculator and lender options coming soon.</p>
+      {/* ROI CALCULATOR TAB */}
+      {activeTab === "roi" && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6">
+                  <h3 className="font-bold text-slate-900 text-lg">Rent vs. Build Calculator</h3>
+                  <div className="space-y-4">
+                      <div>
+                          <label className="block text-sm font-bold text-slate-700 mb-1">Total Project Cost</label>
+                          <input 
+                            type="number" 
+                            value={estimatedCost} 
+                            onChange={(e) => setEstimatedCost(Number(e.target.value))}
+                            className="w-full rounded-lg border-slate-300 bg-slate-50" 
+                          />
+                      </div>
+                      <div>
+                          <label className="block text-sm font-bold text-slate-700 mb-1">Projected Monthly Rent</label>
+                          <input 
+                            type="number" 
+                            value={monthlyRent} 
+                            onChange={(e) => setMonthlyRent(Number(e.target.value))}
+                            className="w-full rounded-lg border-slate-300 bg-slate-50" 
+                          />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                          <div>
+                              <label className="block text-sm font-bold text-slate-700 mb-1">Down Payment</label>
+                              <input 
+                                type="number" 
+                                value={downPayment} 
+                                onChange={(e) => setDownPayment(Number(e.target.value))}
+                                className="w-full rounded-lg border-slate-300 bg-slate-50" 
+                              />
+                          </div>
+                          <div>
+                              <label className="block text-sm font-bold text-slate-700 mb-1">Mortgage Rate (%)</label>
+                              <input 
+                                type="number" 
+                                step="0.1"
+                                value={mortgageRate} 
+                                onChange={(e) => setMortgageRate(Number(e.target.value))}
+                                className="w-full rounded-lg border-slate-300 bg-slate-50" 
+                              />
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6 flex flex-col justify-center">
+                  <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl">
+                      <p className="text-sm text-emerald-800 font-bold uppercase mb-1">Monthly Cashflow</p>
+                      <div className="flex items-baseline gap-2">
+                          <h2 className="text-4xl font-black text-emerald-700">
+                              {monthlyCashflow > 0 ? '+' : ''}{formatMoney(monthlyCashflow)}
+                          </h2>
+                          <span className="text-sm text-emerald-600">/ month</span>
+                      </div>
+                      <p className="text-xs text-emerald-600 mt-2">
+                          (Rent - Mortgage - Expenses)
+                      </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                      <div className="p-4 border border-slate-100 rounded-xl bg-slate-50">
+                          <p className="text-xs text-slate-500 font-bold uppercase">Cap Rate</p>
+                          <p className="text-2xl font-black text-slate-900">{capRate.toFixed(1)}%</p>
+                      </div>
+                      <div className="p-4 border border-slate-100 rounded-xl bg-slate-50">
+                          <p className="text-xs text-slate-500 font-bold uppercase">Cash-on-Cash ROI</p>
+                          <p className="text-2xl font-black text-slate-900">{roi.toFixed(1)}%</p>
+                      </div>
+                  </div>
+                  
+                  <div className="text-xs text-slate-400 text-center mt-4">
+                      * Estimates only. Does not constitute financial advice. Mortgage calculated on {amortization} year amortization.
+                  </div>
+              </div>
           </div>
       )}
     </div>

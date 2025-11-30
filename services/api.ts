@@ -1,52 +1,30 @@
-import { User, Project, Task, Milestone, Contractor, ProjectStage, ProjectDocument, BudgetItem, Expense, Quote, Message } from '../types';
+import { User, Project, Task, Milestone, Contractor, ProjectStage, ProjectDocument, BudgetItem, Expense, Quote, Message, Design } from '../types';
 import { supabase } from '../lib/supabase';
 
 export const api = {
   // ... existing methods ...
 
-  // Messages
-  getMessages: async (projectId: string): Promise<Message[]> => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user && projectId) {
-         const { data, error } = await supabase
-            .from('messages')
-            .select('*')
-            .eq('project_id', projectId)
-            .order('created_at', { ascending: true });
-            
-         if (error) {
-             console.error('Error fetching messages:', error);
-             return [];
-         }
-         // Map to identify if sender is current user
-         return (data || []).map((m: any) => ({
-             ...m,
-             sender_role: m.sender_id === session.user.id ? 'user' : 'contractor'
-         }));
+  // Designs
+  getDesigns: async (): Promise<Design[]> => {
+    const { data, error } = await supabase
+        .from('designs')
+        .select('*')
+        .order('estimated_cost', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching designs:', error);
+        return [];
     }
-    return [];
+    return (data as Design[]) || [];
   },
 
-  sendMessage: async (projectId: string, content: string, contractorId?: string): Promise<Message> => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) throw new Error('User not authenticated');
-
-    const { data, error } = await supabase
-        .from('messages')
-        .insert([{ 
-            project_id: projectId, 
-            sender_id: session.user.id, 
-            content,
-            contractor_id: contractorId || null
-        }])
-        .select()
-        .single();
+  saveDesignToProject: async (projectId: string, designId: string): Promise<void> => {
+    const { error } = await supabase
+        .from('projects')
+        .update({ selected_design_id: designId })
+        .eq('id', projectId);
 
     if (error) throw error;
-    return {
-        ...data,
-        sender_role: 'user'
-    } as Message;
   },
 
   getUser: async (): Promise<User | null> => {

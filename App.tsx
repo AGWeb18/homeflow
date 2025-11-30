@@ -21,6 +21,7 @@ const Documents = lazy(() => import("./pages/Documents"));
 const Messages = lazy(() => import("./pages/Messages"));
 const Tasks = lazy(() => import("./pages/Tasks"));
 const TaskDetails = lazy(() => import("./pages/TaskDetails"));
+const Quotes = lazy(() => import("./pages/Quotes"));
 
 const LoadingFallback = () => (
   <div className="flex h-screen items-center justify-center bg-bg-light">
@@ -110,6 +111,14 @@ export default function App() {
                 element={
                   <Suspense fallback={<LoadingFallback />}>
                     <Contractors />
+                  </Suspense>
+                }
+              />
+              <Route
+                path="/quotes"
+                element={
+                  <Suspense fallback={<LoadingFallback />}>
+                    <Quotes />
                   </Suspense>
                 }
               />

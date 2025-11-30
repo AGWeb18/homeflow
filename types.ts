@@ -14,8 +14,9 @@ export interface Project {
   address: string;
   status: 'Planning' | 'Permitting' | 'Construction' | 'Completed';
   progress: number;
-  stage?: ProjectStage | null; // ADU/extension project stage; null means computed from tasks
-  project_type?: string; // 'adu', 'extension', 'renovation', etc.
+  stage?: ProjectStage | null;
+  project_type?: string;
+  selected_design_id?: string | null;
 }
 
 export interface Contractor {
@@ -106,3 +107,25 @@ export interface Message {
   read: boolean;
   sender_role?: 'user' | 'contractor'; // For UI logic (inferred)
 }
+
+export interface Design {
+  id: string;
+  name: string;
+  type: string;
+  sqft: number;
+  bedrooms: number;
+  bathrooms: number;
+  estimated_cost: number;
+  estimated_duration: string;
+  description: string;
+  image_url: string;
+  features: string[];
+  compatibility: string[];
+}
+
+// Re-defining Project here to avoid partial update issues, or just adding the field if I can target it well. 
+// I will just add the Design interface and let the Project interface be updated in full context if needed, 
+// but let's try to update Project interface in place.
+
+// Wait, I can't easily "update" an interface in place with search/replace if I don't have the full context or a unique hook.
+// Let's verify Project definition in types.ts

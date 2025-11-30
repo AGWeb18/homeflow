@@ -18,6 +18,7 @@ const Sidebar = ({ className = "", onClose }: SidebarProps) => {
     { name: "Plan Editor", icon: "architecture", path: "/editor" },
     { name: "Permit Guide", icon: "description", path: "/guide" },
     { name: "Financial Planning", icon: "paid", path: "/finance" },
+    { name: "Quotes", icon: "request_quote", path: "/quotes" },
     { name: "Payments & Budget", icon: "credit_card", path: "/payments" },
     { name: "Find Professionals", icon: "groups", path: "/contractors" },
     { name: "Documents", icon: "folder_open", path: "/documents" },
