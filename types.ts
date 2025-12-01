@@ -121,6 +121,7 @@ export interface Design {
   estimated_duration: string;
   description: string;
   image_url: string;
+  gallery_urls?: string[];
   features: string[];
   compatibility: string[];
 }

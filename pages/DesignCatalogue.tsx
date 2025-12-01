@@ -104,11 +104,20 @@ const DesignCatalogue = () => {
         {filteredDesigns.map((design) => (
           <div key={design.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-all group">
             <div className="relative h-48 bg-slate-200 overflow-hidden">
+              {/* Primary Image (Draw) */}
               <div 
-                className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                className="absolute inset-0 bg-cover bg-center transition-opacity duration-500 group-hover:opacity-0"
                 style={{ backgroundImage: `url(${design.image_url})` }}
               />
-              <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-xs font-bold">
+              {/* Secondary Image (Render) - Reveal on Hover */}
+              {design.gallery_urls && design.gallery_urls[1] && (
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ backgroundImage: `url(${design.gallery_urls[1]})` }}
+                  />
+              )}
+              
+              <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-xs font-bold z-10">
                 {design.type}
               </div>
             </div>
