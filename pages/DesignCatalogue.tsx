@@ -85,7 +85,7 @@ const DesignCatalogue = () => {
 
       {/* Filters */}
       <div className="flex gap-2 overflow-x-auto pb-4 mb-6">
-        {["All", "Laneway House", "Garden Suite", "Basement Suite", "Second Story Addition"].map(cat => (
+        {["All", "Laneway House", "Garden Suite", "Basement Suite", "Second Story Addition", "Multiplex"].map(cat => (
             <button
                 key={cat}
                 onClick={() => setFilter(cat)}
