@@ -59,6 +59,30 @@ const DesignCatalogue = () => {
         <p className="text-slate-500 mt-2">Browse pre-approved ADU designs to fast-track your project.</p>
       </div>
 
+      {/* CMHC Banner */}
+      <div className="bg-gradient-to-r from-blue-900 to-slate-900 rounded-2xl p-8 mb-10 text-white shadow-lg relative overflow-hidden">
+        <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold mb-4">
+                <span className="material-symbols-outlined text-sm">verified</span>
+                Official Source
+            </div>
+            <h2 className="text-2xl font-bold mb-2">CMHC Housing Design Catalogue</h2>
+            <p className="text-blue-100 mb-6 max-w-2xl">
+                Access the official Government of Canada library of standardized housing designs, including ADUs and multiplexes, pre-approved for faster permitting in Ontario.
+            </p>
+            <a 
+                href="https://www.housingcatalogue.cmhc-schl.gc.ca/designs?region=3d6ea929-1d42-463e-b3ca-c2fb6cf24f10&sortOrder=A-Z"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-blue-900 font-bold rounded-lg hover:bg-blue-50 transition-colors"
+            >
+                Browse CMHC Catalogue
+                <span className="material-symbols-outlined text-lg">open_in_new</span>
+            </a>
+        </div>
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+      </div>
+
       {/* Filters */}
       <div className="flex gap-2 overflow-x-auto pb-4 mb-6">
         {["All", "Laneway House", "Garden Suite", "Basement Suite", "Second Story Addition"].map(cat => (

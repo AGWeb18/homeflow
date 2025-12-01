@@ -34,17 +34,20 @@ const ELEMENT_TEMPLATES = {
   },
   structural: { width: 40, height: 10, color: "bg-slate-800", zIndex: 5 }, // Doors/Windows
   area: { width: 300, height: 200, color: "bg-indigo-50/50 border-2 border-dashed border-indigo-400", zIndex: 0 },
+  image: { width: 400, height: 300, color: "", zIndex: 0 },
 };
 
 const PlanEditor = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [elements, setElements] = useState<PlanElement[]>([]);
+  const [elements, setElements] = useState<PlanElement[] & { imageUrl?: string }[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
   const [project, setProject] = useState<Project | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showHelp, setShowHelp] = useState(true);
 
   // Load initial state or template
   useEffect(() => {
@@ -88,12 +91,13 @@ const PlanEditor = () => {
   }, []);
 
   const addElement = (
-    type: "room" | "furniture" | "structural" | "area",
+    type: "room" | "furniture" | "structural" | "area" | "image",
     subType: string,
-    label: string
+    label: string,
+    imageUrl?: string
   ) => {
     const template = ELEMENT_TEMPLATES[type as keyof typeof ELEMENT_TEMPLATES];
-    const newElement: PlanElement = {
+    const newElement: PlanElement & { imageUrl?: string } = {
       id: Date.now().toString(),
       type: type as any,
       subType,
@@ -105,9 +109,20 @@ const PlanEditor = () => {
       rotation: 0,
       color: template.color,
       zIndex: template.zIndex,
+      imageUrl
     };
     setElements([...elements, newElement]);
     setSelectedId(newElement.id);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        const url = URL.createObjectURL(file);
+        addElement("image", "trace", "Trace Image", url);
+    }
+    // Reset input
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const updateElement = (id: string, changes: Partial<PlanElement>) => {
@@ -189,6 +204,22 @@ const PlanEditor = () => {
                 check_box_outline_blank
               </span>{" "}
               Custom Area
+            </button>
+            <input 
+                type="file" 
+                ref={fileInputRef} 
+                className="hidden" 
+                accept="image/*" 
+                onChange={handleImageUpload} 
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-1 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-xs font-bold text-slate-700"
+            >
+              <span className="material-symbols-outlined text-sm">
+                image
+              </span>{" "}
+              Trace Image
             </button>
             <button
               onClick={() => addElement("structural", "door", "")}
@@ -285,21 +316,26 @@ const PlanEditor = () => {
                     transform: `rotate(${el.rotation}deg)`,
                   }}
                 >
-                  {el.label}
-                  {/* Show dimensions for rooms/areas */}
-                  {(el.type === 'room' || el.type === 'area') && (
-                    <div className="absolute bottom-1 right-2 text-[10px] font-mono text-slate-400 pointer-events-none bg-white/50 px-1 rounded">
-                        {Math.round(el.width / 10)}' x {Math.round(el.height / 10)}'
-                    </div>
-                  )}
-                  
-                  {/* Simple Rotate Handle Visual (not functional via drag, controlled by sidebar) */}
-                  {selectedId === el.id && (
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-6 h-6 bg-white rounded-full border border-slate-300 flex items-center justify-center shadow-sm">
-                      <span className="material-symbols-outlined text-xs text-slate-600">
-                        rotate_right
-                      </span>
-                    </div>
+                  {el.type === 'image' && el.imageUrl ? (
+                      <img src={el.imageUrl} alt="Trace" className="w-full h-full object-contain pointer-events-none opacity-50" />
+                  ) : (
+                      <>
+                        {el.label}
+                        {/* Show dimensions for rooms/areas */}
+                        {(el.type === 'room' || el.type === 'area') && (
+                            <div className="absolute bottom-1 right-2 text-[10px] font-mono text-slate-400 pointer-events-none bg-white/50 px-1 rounded">
+                                {Math.round(el.width / 10)}' x {Math.round(el.height / 10)}'
+                            </div>
+                        )}
+                        {/* Simple Rotate Handle Visual */}
+                        {selectedId === el.id && (
+                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-6 h-6 bg-white rounded-full border border-slate-300 flex items-center justify-center shadow-sm">
+                            <span className="material-symbols-outlined text-xs text-slate-600">
+                                rotate_right
+                            </span>
+                            </div>
+                        )}
+                      </>
                   )}
                 </div>
               </Rnd>
@@ -423,6 +459,29 @@ const PlanEditor = () => {
           </div>
         )}
       </div>
+
+      {/* Help Tip */}
+      {showHelp && (
+        <div className="absolute bottom-6 left-6 z-50 bg-slate-900 text-white p-4 rounded-xl shadow-lg max-w-sm animate-in slide-in-from-bottom-4 duration-500">
+            <div className="flex justify-between items-start gap-3">
+                <div className="flex gap-3">
+                    <span className="material-symbols-outlined text-yellow-400">lightbulb</span>
+                    <div>
+                        <p className="font-bold text-sm">Start Tracing</p>
+                        <p className="text-xs text-slate-300 mt-1">
+                            Click <span className="font-bold text-white">Trace Image</span> in the toolbar to upload your survey or floor plan. Then use the <span className="font-bold text-white">Room</span> tool to draw your new layout over it.
+                        </p>
+                    </div>
+                </div>
+                <button 
+                    onClick={() => setShowHelp(false)}
+                    className="text-slate-400 hover:text-white"
+                >
+                    <span className="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+        </div>
+      )}
     </div>
   );
 };
