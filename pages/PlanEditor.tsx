@@ -3,7 +3,7 @@ import { Rnd } from "react-rnd";
 import { toast } from "react-hot-toast";
 import { useNavigate, useLocation } from "react-router-dom";
 import { api } from "../services/api";
-import { Project } from "../types";
+import { Project, Design } from "../types";
 
 interface PlanElement {
   id: string;
@@ -51,43 +51,75 @@ const PlanEditor = () => {
 
   // Load initial state or template
   useEffect(() => {
-    api.getProject().then(setProject);
-    
-    const savedPlan = localStorage.getItem("customPlan");
-    if (savedPlan) {
-      setElements(JSON.parse(savedPlan));
-      toast.success("Loaded saved plan");
-    } else {
-      // Initial Demo Layout if empty
-      setElements([
-        {
-          id: "1",
-          type: "room",
-          subType: "bedroom",
-          label: "Master Bed",
-          x: 50,
-          y: 50,
-          width: 300,
-          height: 250,
-          rotation: 0,
-          color: "bg-white border-4 border-slate-800",
-          zIndex: 1,
-        },
-        {
-          id: "2",
-          type: "structural",
-          subType: "door",
-          label: "",
-          x: 180,
-          y: 290,
-          width: 40,
-          height: 10,
-          rotation: 0,
-          color: "bg-white border-x-2 border-slate-800",
-          zIndex: 20,
-        },
-      ]);
-    }
+    const loadData = async () => {
+      try {
+        const p = await api.getProject();
+        setProject(p);
+
+        const savedPlan = localStorage.getItem("customPlan");
+        
+        if (savedPlan) {
+          setElements(JSON.parse(savedPlan));
+          toast.success("Loaded saved plan");
+        } else if (p?.selected_design_id) {
+          // If no saved plan but a design is selected, load its floorplan
+          const designs = await api.getDesigns();
+          const selectedDesign = designs.find(d => d.id === p.selected_design_id);
+          
+          if (selectedDesign) {
+             const newElement: any = {
+                id: "trace-1",
+                type: "image",
+                subType: "trace",
+                label: "Floorplan",
+                x: 50,
+                y: 50,
+                width: 600, // Default larger size for floorplans
+                height: 450,
+                rotation: 0,
+                color: "",
+                zIndex: 0,
+                imageUrl: selectedDesign.image_url // Use the draw version
+             };
+             setElements([newElement]);
+             toast.success(`Loaded floorplan: ${selectedDesign.name}`);
+          }
+        } else {
+          // Initial Demo Layout if completely empty
+          setElements([
+            {
+              id: "1",
+              type: "room",
+              subType: "bedroom",
+              label: "Master Bed",
+              x: 50,
+              y: 50,
+              width: 300,
+              height: 250,
+              rotation: 0,
+              color: "bg-white border-4 border-slate-800",
+              zIndex: 1,
+            },
+            {
+              id: "2",
+              type: "structural",
+              subType: "door",
+              label: "",
+              x: 180,
+              y: 290,
+              width: 40,
+              height: 10,
+              rotation: 0,
+              color: "bg-white border-x-2 border-slate-800",
+              zIndex: 20,
+            },
+          ]);
+        }
+      } catch (e) {
+        console.error("Failed to load plan data", e);
+      }
+    };
+    loadData();
   }, []);
 
   const addElement = (
