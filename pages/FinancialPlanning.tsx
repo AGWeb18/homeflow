@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
-import { DesignModel } from "../services/catalogueData";
 import { api } from "../services/api";
-import { Project, BudgetItem, Expense } from "../types";
+import { Project, BudgetItem, Expense, Design } from "../types";
 
 const FinancialPlanning = () => {
   const [activeTab, setActiveTab] = useState("estimator");
   const [project, setProject] = useState<Project | null>(null);
   
   // Estimator State
-  const [selectedDesign, setSelectedDesign] = useState<DesignModel | null>(null);
+  const [selectedDesign, setSelectedDesign] = useState<Design | null>(null);
   const [sqft, setSqft] = useState(750);
   const [bedrooms, setBedrooms] = useState(2);
   const [estimatedCost, setEstimatedCost] = useState(187500);
@@ -35,11 +34,11 @@ const FinancialPlanning = () => {
     // Load design for estimator
     const storedDesign = localStorage.getItem("selectedDesign");
     if (storedDesign) {
-      const design: DesignModel = JSON.parse(storedDesign);
+      const design: Design = JSON.parse(storedDesign);
       setSelectedDesign(design);
       setSqft(design.sqft);
       setBedrooms(design.bedrooms);
-      setEstimatedCost(design.estimatedCost);
+      setEstimatedCost(design.estimated_cost);
     }
   }, []);
 

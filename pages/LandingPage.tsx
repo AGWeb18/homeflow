@@ -69,8 +69,7 @@ const LandingPage = () => {
                 </button>
               </div>
               <p className="text-xs text-slate-400 mt-3 ml-2">
-                <span className="font-bold">Try:</span> 123 Maple Street, San
-                Francisco
+                <span className="font-bold">Try:</span> 123 Maple Street, Toronto
               </p>
             </div>
           </div>

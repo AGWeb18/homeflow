@@ -26,14 +26,14 @@ const RecenterAutomatically = ({ lat, lng }: { lat: number; lng: number }) => {
 };
 
 const MapPreview: React.FC<MapPreviewProps> = ({ className, isAnalyzed }) => {
-  // Default center (San Francisco)
-  const [position, setPosition] = useState<[number, number]>([37.7749, -122.4194]);
+  // Default center (Toronto, ON)
+  const [position, setPosition] = useState<[number, number]>([43.6532, -79.3832]);
 
   useEffect(() => {
     if (isAnalyzed) {
       // Simulate moving to a specific "found" address
       // In a real app, this would come from the geocoding result
-      setPosition([37.7544, -122.4477]); // Twin Peaks area example
+      setPosition([43.6426, -79.3871]); // CN Tower area example
     }
   }, [isAnalyzed]);
 

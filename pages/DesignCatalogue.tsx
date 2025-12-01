@@ -35,14 +35,7 @@ const DesignCatalogue = () => {
     try {
         await api.saveDesignToProject(project.id, design.id);
         // Also save to local storage for the legacy/hybrid approach if needed
-        localStorage.setItem("selectedDesign", JSON.stringify({
-            id: design.id,
-            name: design.name,
-            sqft: design.sqft,
-            bedrooms: design.bedrooms,
-            estimatedCost: design.estimated_cost,
-            image: design.image_url
-        }));
+        localStorage.setItem("selectedDesign", JSON.stringify(design));
         toast.success(`${design.name} saved to your project!`);
         // Refresh project to update UI if needed
         const p = await api.getProject();
