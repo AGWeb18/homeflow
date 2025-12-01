@@ -17,6 +17,8 @@ export interface Project {
   stage?: ProjectStage | null;
   project_type?: string;
   selected_design_id?: string | null;
+  permit_number?: string | null;
+  inspection_phone?: string | null;
 }
 
 export interface Contractor {

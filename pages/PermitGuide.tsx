@@ -1,6 +1,7 @@
 import React from "react";
 import sourcesManifest from "../data/ontario/sources.json";
 import { api } from "../services/api";
+import { toast } from "react-hot-toast";
 
 const PermitGuide: React.FC = () => {
   const [projectType, setProjectType] = React.useState("New ADU");
@@ -12,6 +13,11 @@ const PermitGuide: React.FC = () => {
   const [showChecklist, setShowChecklist] = React.useState(false);
   const [project, setProject] = React.useState<any | null>(null);
   const [projectTasks, setProjectTasks] = React.useState<any[]>([]);
+  
+  // Permit Wallet State
+  const [permitNumber, setPermitNumber] = React.useState("");
+  const [inspectionLine, setInspectionLine] = React.useState("");
+  const [isEditingWallet, setIsEditingWallet] = React.useState(false);
 
   // Eager-load all ADU checklist JSONs under data/ontario/permit_checklists/**/adu.json
   const files = import.meta.glob(
@@ -38,6 +44,10 @@ const PermitGuide: React.FC = () => {
         const p = await api.getProject();
         if (p) {
           setProject(p);
+          // Load saved permit info from project record
+          if (p.permit_number) setPermitNumber(p.permit_number);
+          if (p.inspection_phone) setInspectionLine(p.inspection_phone);
+
           const t = await api.getTasks(p.id);
           setProjectTasks(t || []);
           // Try to resolve municipality from address using Google Maps Geocoding
@@ -78,6 +88,22 @@ const PermitGuide: React.FC = () => {
       }
     })();
   }, []);
+
+  const handleSaveWallet = async () => {
+      if (project) {
+          try {
+              await api.updateProject(project.id, { 
+                  permit_number: permitNumber, 
+                  inspection_phone: inspectionLine 
+              });
+              setIsEditingWallet(false);
+              toast.success("Permit details saved to project!");
+          } catch (err) {
+              console.error(err);
+              toast.error("Failed to save permit details.");
+          }
+      }
+  };
 
   const generateChecklist = () => {
     // Find the loaded JSON for the selected municipality
@@ -240,6 +266,75 @@ const PermitGuide: React.FC = () => {
             </span>
             Change Address
           </button>
+        </div>
+
+        {/* Permit Wallet Widget */}
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-6 shadow-sm mb-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10 text-blue-600">
+                <span className="material-symbols-outlined text-9xl">folder_shared</span>
+            </div>
+            
+            <div className="relative z-10">
+                <div className="flex justify-between items-start mb-4">
+                    <div>
+                        <h2 className="font-bold text-blue-900 text-lg flex items-center gap-2">
+                            <span className="material-symbols-outlined">badge</span>
+                            Permit Wallet
+                        </h2>
+                        <p className="text-sm text-blue-700 mt-1">Keep your official permit details handy for inspections.</p>
+                    </div>
+                    <button 
+                        onClick={() => setIsEditingWallet(!isEditingWallet)}
+                        className="text-sm font-bold text-blue-600 hover:text-blue-800 hover:underline"
+                    >
+                        {isEditingWallet ? 'Cancel' : 'Edit Details'}
+                    </button>
+                </div>
+
+                {isEditingWallet ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in fade-in duration-300">
+                        <div>
+                            <label className="block text-xs font-bold text-blue-800 mb-1 uppercase">Building Permit Number</label>
+                            <input 
+                                type="text" 
+                                value={permitNumber}
+                                onChange={(e) => setPermitNumber(e.target.value)}
+                                placeholder="e.g. 2025-123456-RES"
+                                className="w-full rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500 text-sm"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-blue-800 mb-1 uppercase">Inspection Request Line</label>
+                            <input 
+                                type="text" 
+                                value={inspectionLine}
+                                onChange={(e) => setInspectionLine(e.target.value)}
+                                placeholder="e.g. 416-555-0123"
+                                className="w-full rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500 text-sm"
+                            />
+                        </div>
+                        <div className="md:col-span-2 flex justify-end">
+                            <button 
+                                onClick={handleSaveWallet}
+                                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg shadow-sm transition-colors"
+                            >
+                                Save Details
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-white/60 p-3 rounded-lg border border-blue-100">
+                            <p className="text-xs font-bold text-blue-400 uppercase mb-1">Permit Number</p>
+                            <p className="font-mono font-bold text-slate-900 text-lg">{permitNumber || "—"}</p>
+                        </div>
+                        <div className="bg-white/60 p-3 rounded-lg border border-blue-100">
+                            <p className="text-xs font-bold text-blue-400 uppercase mb-1">Inspection Line</p>
+                            <p className="font-mono font-bold text-slate-900 text-lg">{inspectionLine || "—"}</p>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
 
         <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm mb-8">

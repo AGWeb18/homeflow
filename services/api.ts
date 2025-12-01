@@ -73,6 +73,15 @@ export const api = {
     return null; 
   },
 
+  updateProject: async (projectId: string, updates: Partial<Project>): Promise<void> => {
+    const { error } = await supabase
+        .from('projects')
+        .update(updates)
+        .eq('id', projectId);
+
+    if (error) throw error;
+  },
+
   getTasks: async (projectId: string): Promise<Task[]> => {
     const { data: { session } } = await supabase.auth.getSession();
     if (session?.user && projectId) {

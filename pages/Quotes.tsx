@@ -63,6 +63,30 @@ const Quotes = () => {
     }
   };
 
+  const handleAcceptQuote = async (quote: Quote) => {
+    if (!project) return;
+    if (!window.confirm(`Are you sure you want to accept the quote from ${quote.contractor?.name}?`)) return;
+
+    try {
+        await api.updateQuoteStatus(quote.id, 'accepted');
+        // Add to team if not already there (though createRequest logic might imply they are already there, 
+        // but in a real marketplace they might not be).
+        // Our current Create Request UI requires them to be in the team, but let's be safe.
+        if (quote.contractor) {
+             await api.addToTeam(project.id, quote.contractor.id, quote.contractor.role);
+        }
+        
+        toast.success("Quote accepted! Contractor added to your team.");
+        
+        // Refresh quotes
+        const q = await api.getQuotes(project.id);
+        setQuotes(q);
+    } catch (err) {
+        console.error(err);
+        toast.error("Failed to accept quote.");
+    }
+  };
+
   if (loading) return <div className="p-6">Loading quotes...</div>;
 
   // Separate quotes into 'received' (have amount > 0) and 'requests' (amount 0 or status pending/sent)
@@ -117,8 +141,18 @@ const Quotes = () => {
                                 </span>
                             </div>
                             <div className="flex justify-between items-end">
-                                <p className="text-xs text-slate-400">Received: {new Date(q.received_date).toLocaleDateString()}</p>
-                                <p className="font-black text-lg text-slate-900">${q.amount.toLocaleString()}</p>
+                                <div>
+                                    <p className="text-xs text-slate-400">Received: {new Date(q.received_date).toLocaleDateString()}</p>
+                                    <p className="font-black text-lg text-slate-900">${q.amount.toLocaleString()}</p>
+                                </div>
+                                {q.status === 'pending' && (
+                                    <button 
+                                        onClick={(e) => { e.stopPropagation(); handleAcceptQuote(q); }}
+                                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-lg shadow-sm transition-colors"
+                                    >
+                                        Accept Quote
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}
